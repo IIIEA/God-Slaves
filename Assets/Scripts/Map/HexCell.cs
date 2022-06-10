@@ -6,11 +6,12 @@ public class HexCell : MonoBehaviour
 {
     [SerializeField] private HexCell[] _neighbors = new HexCell[6];
 
-    private int _elevation;
+    private int _elevation = int.MinValue;
 
+    public HexGridChunk Chunk;
     public RectTransform UIRect;
     public HexCoordinates Coordinates;
-    public Color Color;
+    public Color _color;
 
     public Vector3 Position => transform.localPosition;
 
@@ -22,7 +23,9 @@ public class HexCell : MonoBehaviour
         }
         set
         {
-            _elevation = value;
+            if (_elevation == value)
+                return;
+            
             Vector3 position = transform.localPosition;
             position.y = value * HexMetrics.ElevationStep;
             position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.ElevationPerturbStrength;
@@ -31,6 +34,25 @@ public class HexCell : MonoBehaviour
             Vector3 uiPosition = UIRect.localPosition;
             uiPosition.z = -position.y;
             UIRect.localPosition = uiPosition;
+
+            Refresh();
+        }
+    }
+
+    public Color Color
+    {
+        get
+        {
+            return _color;
+        }
+        set
+        {
+            if (_color == value)
+                return;
+            
+            _color = value;
+
+            Refresh();
         }
     }
 
@@ -53,6 +75,23 @@ public class HexCell : MonoBehaviour
     {
         _neighbors[(int)direction] = cell;
         cell._neighbors[(int)direction.Opposite()] = this;
+    }
+
+    private void Refresh()
+    {
+        if (Chunk)
+        {
+            Chunk.Refresh();
+
+            for (int i = 0; i < _neighbors.Length; i++)
+            {
+                HexCell neighbor = _neighbors[i];
+                if (neighbor != null && neighbor.Chunk != Chunk)
+                {
+                    neighbor.Chunk.Refresh();
+                }
+            }
+        }
     }
 }
 

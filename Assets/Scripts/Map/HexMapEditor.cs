@@ -7,6 +7,9 @@ public class HexMapEditor : MonoBehaviour
 	[SerializeField] private Color[] _colors;
 	[SerializeField] private HexGrid _hexGrid;
 
+	private int _brushSize;
+	private bool _applyElevation = true;
+	private bool _applyColor;
 	private Color _activeColor;
 	private int _activeElevation;
 
@@ -23,14 +26,34 @@ public class HexMapEditor : MonoBehaviour
 		}
 	}
 
+	public void ShowUI(Toggle visible)
+	{
+		_hexGrid.ShowUI(visible);
+	}
+
+	public void SetApplyElevation(Toggle toggle)
+	{
+		_applyElevation = toggle;
+	}
+
+	public void SetBrushSize(Slider size)
+	{
+		_brushSize = (int)size.value;
+	}
+
 	public void SetElevation(Slider slider)
 	{
 		_activeElevation = (int)slider.value;
 	}
 
 	public void SelectColor(int index)
-	{
-		_activeColor = _colors[index];
+    {
+        _applyColor = index >= 0;
+
+        if (_applyColor)
+		{
+			_activeColor = _colors[index];
+		}
 	}
 
 	private void HandleInput()
@@ -40,14 +63,45 @@ public class HexMapEditor : MonoBehaviour
 
 		if (Physics.Raycast(inputRay, out hit))
 		{
-			EditCell(_hexGrid.GetCell(hit.point));
+			EditCells(_hexGrid.GetCell(hit.point));
+		}
+	}
+
+	private void EditCells(HexCell center)
+	{
+		int centerX = center.Coordinates.X;
+		int centerZ = center.Coordinates.Z;
+
+		for (int r = 0, z = centerZ - _brushSize; z <= centerZ; z++, r++)
+		{
+			for (int x = centerX - r; x <= centerX + _brushSize; x++)
+			{
+				EditCell(_hexGrid.GetCell(new HexCoordinates(x, z)));
+			}
+		}
+
+		for (int r = 0, z = centerZ + _brushSize; z > centerZ; z--, r++)
+		{
+			for (int x = centerX - _brushSize; x <= centerX + r; x++)
+			{
+				EditCell(_hexGrid.GetCell(new HexCoordinates(x, z)));
+			}
 		}
 	}
 
 	private void EditCell(HexCell cell)
 	{
-		cell.Color = _activeColor;
-		cell.Elevation = _activeElevation;
-		_hexGrid.Refresh();
+		if (cell)
+		{
+			if (_applyColor)
+			{
+				cell.Color = _activeColor;
+			}
+
+			if (_applyElevation)
+			{
+				cell.Elevation = _activeElevation;
+			}
+		}
 	}
 }
