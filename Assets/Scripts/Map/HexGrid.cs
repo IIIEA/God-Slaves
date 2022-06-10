@@ -8,6 +8,7 @@ public class HexGrid : MonoBehaviour
 	[Header("Links")]
 	[SerializeField] private TMP_Text _cellLabelPrefab;
 	[SerializeField] private HexCell _cellPrefab;
+	[SerializeField] private Texture2D _noiseSource;
 	[Header("Map parameters")]
 	[SerializeField] private int _width = 6;
 	[SerializeField] private int _height = 6;
@@ -19,6 +20,7 @@ public class HexGrid : MonoBehaviour
 
 	void Awake()
 	{
+		HexMetrics.NoiseSource = _noiseSource;
 		_hexMesh = GetComponentInChildren<HexMesh>();
 		_gridCanvas = GetComponentInChildren<Canvas>();
 		CreateGrid();
@@ -29,7 +31,12 @@ public class HexGrid : MonoBehaviour
 		_hexMesh.Triangulate(_cells);
     }
 
-	public void Refresh()
+    private void OnEnable()
+    {
+		HexMetrics.NoiseSource = _noiseSource;
+	}
+
+    public void Refresh()
 	{
 		_hexMesh.Triangulate(_cells);
 	}
@@ -101,5 +108,6 @@ public class HexGrid : MonoBehaviour
 		label.text = cell.Coordinates.ToStringOnSeparateLines();
 
 		cell.UIRect = label.rectTransform;
+		cell.Elevation = 0;
 	}
 }

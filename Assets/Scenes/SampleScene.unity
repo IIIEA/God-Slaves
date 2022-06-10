@@ -2388,6 +2388,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cellLabelPrefab: {fileID: 2311549994955900647, guid: 1535b3087adddcc48a103264b5de96ee, type: 3}
   _cellPrefab: {fileID: 9009091871767226338, guid: 59c3a26f87c65c24eb521c4c9c8eed2c, type: 3}
+  _noiseSource: {fileID: 2800000, guid: 15bd0f5f11c488d46a4c024aa6cdbc07, type: 3}
   _width: 6
   _height: 6
   _defaultColor: {r: 1, g: 1, b: 1, a: 1}
