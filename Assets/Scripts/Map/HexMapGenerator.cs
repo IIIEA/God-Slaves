@@ -120,12 +120,15 @@ public class HexMapGenerator : MonoBehaviour
 
     struct Biome
     {
-        public int terrain, plant;
+        public int Terrain, Plant, Farm, Urban, Special;
 
-        public Biome(int terrain, int plant)
+        public Biome(int terrain, int plant, int farm, int urban, int special)
         {
-            this.terrain = terrain;
-            this.plant = plant;
+            Terrain = terrain;
+            Plant = plant;
+            Farm = farm;
+            Urban = urban;
+            Special = special;
         }
     }
 
@@ -134,10 +137,10 @@ public class HexMapGenerator : MonoBehaviour
     static float[] moistureBands = { 0.12f, 0.28f, 0.85f };
 
     static Biome[] biomes = {
-        new Biome(0, 0), new Biome(4, 0), new Biome(4, 0), new Biome(4, 0),
-        new Biome(0, 0), new Biome(2, 0), new Biome(2, 1), new Biome(2, 2),
-        new Biome(0, 0), new Biome(1, 0), new Biome(1, 1), new Biome(1, 2),
-        new Biome(0, 0), new Biome(1, 1), new Biome(1, 2), new Biome(1, 3)
+        new Biome(0, 0, 0, 4, 0), new Biome(4, 0, 0, 0, 0), new Biome(4, 0, 0, 0, 0), new Biome(4, 0, 0, 0, 0),
+        new Biome(0, 0, 0, 4, 0), new Biome(2, 0, 0, 0, 0), new Biome(2, 1, 0, 0, 0), new Biome(2, 2, 0, 0, 0),
+        new Biome(0, 0, 0, 4, 0), new Biome(1, 0, 0, 0, 0), new Biome(1, 1, 0, 0, 0), new Biome(1, 2, 0, 0, 0),
+        new Biome(0, 0, 0, 4, 0), new Biome(1, 1, 0, 0, 0), new Biome(1, 2, 0, 0, 0), new Biome(1, 3, 0, 0, 0)
     };
 
     public void GenerateMap(int x, int z, bool wrapping)
@@ -793,9 +796,11 @@ public class HexMapGenerator : MonoBehaviour
             HexCell cell = grid.GetCell(i);
             float temperature = DetermineTemperature(cell);
             float moisture = climate[i].moisture;
+
             if (!cell.IsUnderwater)
             {
                 int t = 0;
+
                 for (; t < temperatureBands.Length; t++)
                 {
                     if (temperature < temperatureBands[t])
@@ -803,7 +808,9 @@ public class HexMapGenerator : MonoBehaviour
                         break;
                     }
                 }
+
                 int m = 0;
+
                 for (; m < moistureBands.Length; m++)
                 {
                     if (moisture < moistureBands[m])
@@ -811,31 +818,25 @@ public class HexMapGenerator : MonoBehaviour
                         break;
                     }
                 }
+
                 Biome cellBiome = biomes[t * 4 + m];
 
-                if (cellBiome.terrain == 0)
+                if (cellBiome.Terrain == 0)
                 {
                     if (cell.Elevation >= rockDesertElevation)
                     {
-                        cellBiome.terrain = 3;
+                        cellBiome.Terrain = 3;
                     }
                 }
                 else if (cell.Elevation == elevationMaximum)
                 {
-                    cellBiome.terrain = 4;
+                    cellBiome.Terrain = 4;
                 }
 
-                if (cellBiome.terrain == 4)
-                {
-                    cellBiome.plant = 0;
-                }
-                else if (cellBiome.plant < 3 && cell.HasRiver)
-                {
-                    cellBiome.plant += 1;
-                }
+                cell.TerrainTypeIndex = cellBiome.Terrain;
 
-                cell.TerrainTypeIndex = cellBiome.terrain;
-                cell.PlantLevel = cellBiome.plant;
+                SetPlantLevel(cellBiome, cell);
+                SetUrbanLevel(cellBiome, cell);
             }
             else
             {
@@ -928,6 +929,45 @@ public class HexMapGenerator : MonoBehaviour
         temperature += (jitter * 2f - 1f) * temperatureJitter;
 
         return temperature;
+    }
+
+    private void SetPlantLevel(Biome cellBiome, HexCell cell)
+    {
+
+        if (cellBiome.Terrain == 4)
+        {
+            cellBiome.Plant = 0;
+        }
+        else if (cellBiome.Plant < 3 && cell.HasRiver)
+        {
+            cellBiome.Plant += 1;
+        }
+
+        cell.PlantLevel = cellBiome.Plant;
+    }
+
+    private void SetUrbanLevel(Biome cellBiome, HexCell cell)
+    {
+        if (cellBiome.Terrain < 4)
+        {
+            cellBiome.Urban = 0;
+        }
+        else if (cellBiome.Urban < 3)
+        {
+            cellBiome.Urban += 1;
+        }
+
+        cell.UrbanLevel = cellBiome.Urban;
+    }
+
+    private void SetSpecialLevel()
+    {
+
+    }
+
+    private void SetFarmLevel()
+    {
+
     }
 
     HexCell GetRandomCell(MapRegion region)
