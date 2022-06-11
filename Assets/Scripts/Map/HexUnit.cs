@@ -5,7 +5,6 @@ using System.IO;
 
 public class HexUnit : MonoBehaviour
 {
-
     const float rotationSpeed = 180f;
     const float travelSpeed = 4f;
 
@@ -26,6 +25,7 @@ public class HexUnit : MonoBehaviour
                 Grid.DecreaseVisibility(location, VisionRange);
                 location.Unit = null;
             }
+
             location = value;
             value.Unit = this;
             Grid.IncreaseVisibility(value, VisionRange);
@@ -98,10 +98,12 @@ public class HexUnit : MonoBehaviour
         {
             currentTravelLocation = pathToTravel[0];
         }
+
         Grid.DecreaseVisibility(currentTravelLocation, VisionRange);
         int currentColumn = currentTravelLocation.ColumnIndex;
 
         float t = Time.deltaTime * travelSpeed;
+
         for (int i = 1; i < pathToTravel.Count; i++)
         {
             currentTravelLocation = pathToTravel[i];
@@ -121,6 +123,7 @@ public class HexUnit : MonoBehaviour
                     a.x += HexMetrics.InnerDiameter * HexMetrics.wrapSize;
                     b.x += HexMetrics.InnerDiameter * HexMetrics.wrapSize;
                 }
+
                 Grid.MakeChildOfColumn(transform, nextColumn);
                 currentColumn = nextColumn;
             }
@@ -136,15 +139,18 @@ public class HexUnit : MonoBehaviour
                 transform.localRotation = Quaternion.LookRotation(d);
                 yield return null;
             }
+
             Grid.DecreaseVisibility(pathToTravel[i], VisionRange);
             t -= 1f;
         }
+
         currentTravelLocation = null;
 
         a = c;
         b = location.Position;
         c = b;
         Grid.IncreaseVisibility(location, VisionRange);
+
         for (; t < 1f; t += Time.deltaTime * travelSpeed)
         {
             transform.localPosition = Bezier.GetPoint(a, b, c, t);
@@ -160,7 +166,7 @@ public class HexUnit : MonoBehaviour
         pathToTravel = null;
     }
 
-    IEnumerator LookAt(Vector3 point)
+    private IEnumerator LookAt(Vector3 point)
     {
         if (HexMetrics.Wrapping)
         {
@@ -177,8 +183,7 @@ public class HexUnit : MonoBehaviour
 
         point.y = transform.localPosition.y;
         Quaternion fromRotation = transform.localRotation;
-        Quaternion toRotation =
-            Quaternion.LookRotation(point - transform.localPosition);
+        Quaternion toRotation = Quaternion.LookRotation(point - transform.localPosition);
         float angle = Quaternion.Angle(fromRotation, toRotation);
 
         if (angle > 0f)
@@ -200,19 +205,22 @@ public class HexUnit : MonoBehaviour
         orientation = transform.localRotation.eulerAngles.y;
     }
 
-    public int GetMoveCost(
-        HexCell fromCell, HexCell toCell, HexDirection direction)
+    public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direction)
     {
         if (!IsValidDestination(toCell))
         {
             return -1;
         }
+
         HexEdgeType edgeType = fromCell.GetEdgeType(toCell);
+
         if (edgeType == HexEdgeType.Cliff)
         {
             return -1;
         }
+
         int moveCost;
+
         if (fromCell.HasRoadThroughEdge(direction))
         {
             moveCost = 1;
@@ -224,9 +232,9 @@ public class HexUnit : MonoBehaviour
         else
         {
             moveCost = edgeType == HexEdgeType.Flat ? 5 : 10;
-            moveCost +=
-                toCell.UrbanLevel + toCell.FarmLevel + toCell.PlantLevel;
+            moveCost += toCell.UrbanLevel + toCell.FarmLevel + toCell.PlantLevel;
         }
+
         return moveCost;
     }
 
@@ -250,16 +258,15 @@ public class HexUnit : MonoBehaviour
     {
         HexCoordinates coordinates = HexCoordinates.Load(reader);
         float orientation = reader.ReadSingle();
-        grid.AddUnit(
-            Instantiate(unitPrefab), grid.GetCell(coordinates), orientation
-        );
+        grid.AddUnit(Instantiate(unitPrefab), grid.GetCell(coordinates), orientation);
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         if (location)
         {
             transform.localPosition = location.Position;
+
             if (currentTravelLocation)
             {
                 Grid.IncreaseVisibility(location, VisionRange);

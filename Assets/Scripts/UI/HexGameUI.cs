@@ -8,7 +8,7 @@ public class HexGameUI : MonoBehaviour
     private HexCell _currentCell;
     private HexUnit _selectedUnit;
 
-    void Update()
+    private void Update()
     {
         if (!EventSystem.current.IsPointerOverGameObject())
         {
@@ -46,7 +46,7 @@ public class HexGameUI : MonoBehaviour
         }
     }
 
-    void DoSelection()
+    private void DoSelection()
     {
         Grid.ClearPath();
         UpdateCurrentCell();
@@ -57,7 +57,7 @@ public class HexGameUI : MonoBehaviour
         }
     }
 
-    void DoPathfinding()
+    private void DoPathfinding()
     {
         if (UpdateCurrentCell())
         {
@@ -72,7 +72,7 @@ public class HexGameUI : MonoBehaviour
         }
     }
 
-    void DoMove()
+    private void DoMove()
     {
         if (Grid.HasPath)
         {
@@ -81,7 +81,7 @@ public class HexGameUI : MonoBehaviour
         }
     }
 
-    bool UpdateCurrentCell()
+    private bool UpdateCurrentCell()
     {
         HexCell cell = Grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
 

@@ -45,7 +45,7 @@ public class NewMapMenu : MonoBehaviour
         CreateMap(80, 60);
     }
 
-    void CreateMap(int x, int z)
+    private void CreateMap(int x, int z)
     {
         if (_generateMaps)
         {
