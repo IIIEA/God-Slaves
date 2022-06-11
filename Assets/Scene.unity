@@ -2820,7 +2820,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5069366424a544be0b028f5cef956c44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Grid: {fileID: 0}
+  Grid: {fileID: 1571186511}
 --- !u!1 &345848024
 GameObject:
   m_ObjectHideFlags: 0
@@ -11618,12 +11618,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 2
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -11662,12 +11662,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8593b684355b34daca62f2a33ff95736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MenuLabel: {fileID: 0}
-  ActionButtonLabel: {fileID: 0}
-  NameInput: {fileID: 0}
-  ListContent: {fileID: 0}
-  ItemPrefab: {fileID: 0}
-  HexGrid: {fileID: 0}
+  MenuLabel: {fileID: 166284117}
+  ActionButtonLabel: {fileID: 595257383}
+  NameInput: {fileID: 89474001}
+  ListContent: {fileID: 218360314}
+  ItemPrefab: {fileID: 114778907200386024, guid: 3ba1efbe9386b435da480e11c9fcb2df, type: 3}
+  HexGrid: {fileID: 1571186511}
 --- !u!1 &1646147695
 GameObject:
   m_ObjectHideFlags: 0
@@ -11817,12 +11817,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -11861,8 +11861,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71867f3df5b1f44389d34c7942834331, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HexGrid: {fileID: 0}
-  MapGenerator: {fileID: 0}
+  HexGrid: {fileID: 1571186511}
+  MapGenerator: {fileID: 2056945512}
 --- !u!1 &1651949012
 GameObject:
   m_ObjectHideFlags: 0
@@ -16346,5 +16346,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e363bf5181e448a78cb05f5d6a64930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HexGrid: {fileID: 0}
-  TerrainMaterial: {fileID: 0}
+  HexGrid: {fileID: 1571186511}
+  TerrainMaterial: {fileID: 2100000, guid: 6a3f5c7892e4b478e9e745026e6fe9f7, type: 2}
