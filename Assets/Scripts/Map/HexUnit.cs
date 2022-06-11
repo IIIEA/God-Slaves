@@ -244,6 +244,7 @@ public class HexUnit : MonoBehaviour
         {
             Grid.DecreaseVisibility(location, VisionRange);
         }
+
         location.Unit = null;
         Destroy(gameObject);
     }

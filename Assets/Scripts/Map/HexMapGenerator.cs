@@ -141,9 +141,9 @@ public class HexMapGenerator : MonoBehaviour
 
     static Biome[] biomes = {
         new Biome(0, 0, 0, 4, 0), new Biome(4, 0, 0, 0, 0), new Biome(4, 0, 0, 0, 0), new Biome(4, 0, 0, 0, 0),
-        new Biome(0, 0, 0, 4, 0), new Biome(2, 0, 0, 0, 0), new Biome(2, 1, 0, 0, 0), new Biome(2, 2, 0, 0, 0),
-        new Biome(0, 0, 0, 4, 0), new Biome(1, 0, 0, 0, 0), new Biome(1, 1, 0, 0, 0), new Biome(1, 2, 0, 0, 0),
-        new Biome(0, 0, 0, 4, 0), new Biome(1, 1, 0, 0, 0), new Biome(1, 2, 0, 0, 0), new Biome(1, 3, 0, 0, 0)
+        new Biome(0, 0, 0, 4, 0), new Biome(3, 0, 0, 0, 0), new Biome(3, 1, 1, 0, 0), new Biome(2, 1, 0, 0, 0),
+        new Biome(0, 0, 0, 4, 0), new Biome(1, 0, 0, 0, 0), new Biome(1, 1, 1, 0, 0), new Biome(2, 1, 0, 0, 0),
+        new Biome(0, 0, 0, 4, 0), new Biome(1, 1, 0, 0, 0), new Biome(1, 1, 0, 0, 0), new Biome(1, 3, 0, 0, 0)
     };
 
     public void GenerateMap(int x, int z, bool wrapping)
@@ -842,6 +842,7 @@ public class HexMapGenerator : MonoBehaviour
 
                 SetPlantLevel(cellBiome, cell);
                 SetUrbanLevel(cellBiome, cell);
+                SetFarmLevel(cellBiome, cell);
             }
             else
             {
@@ -965,14 +966,23 @@ public class HexMapGenerator : MonoBehaviour
         cell.UrbanLevel = cellBiome.Urban;
     }
 
-    private void SetSpecialLevel()
+    private void SetSpecialLevel(Biome cellBiome, HexCell cell)
     {
 
     }
 
-    private void SetFarmLevel()
+    private void SetFarmLevel(Biome cellBiome, HexCell cell)
     {
+        if (cellBiome.Terrain == 4 || cellBiome.Terrain == 2)
+        {
+            cellBiome.Farm = 0;
+        }
+        else if (cellBiome.Farm < 3)
+        {
+            cellBiome.Farm += 1;
+        }
 
+        cell.FarmLevel = cellBiome.Farm;
     }
 
     private void SpawnUnits()

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 430146}
   - component: {fileID: 11422220}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Hex Cell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
