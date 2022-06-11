@@ -72,6 +72,18 @@ public class HexGameUI : MonoBehaviour
         }
     }
 
+    private void DoPathfinding(HexUnit unit, HexCell cellToTravel)
+    {
+        if(cellToTravel && unit.IsValidDestination(cellToTravel))
+        {
+            Grid.FindPath(unit.Location, cellToTravel, unit);
+        }
+        else
+        {
+            Grid.ClearPath();
+        }
+    }
+
     private void DoMove()
     {
         if (Grid.HasPath)

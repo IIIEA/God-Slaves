@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class HexGrid : MonoBehaviour
 {
@@ -29,6 +30,9 @@ public class HexGrid : MonoBehaviour
     private HexCellShaderData _cellShaderData;
 
     public bool HasPath => _currentPathExists;
+    public List<HexUnit> Units => _units;
+
+    public event Action<HexUnit> UnitAdded;
 
     private void Awake()
     {
@@ -54,6 +58,7 @@ public class HexGrid : MonoBehaviour
 
     public void AddUnit(HexUnit unit, HexCell location, float orientation)
     {
+        UnitAdded?.Invoke(unit);
         _units.Add(unit);
         unit.Grid = this;
         unit.Location = location;

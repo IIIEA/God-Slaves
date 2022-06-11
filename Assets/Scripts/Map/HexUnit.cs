@@ -2,15 +2,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System;
 
 public class HexUnit : MonoBehaviour
 {
+    [SerializeField] private LayerMask _groundLayer;
+
+    private float _orientation;
+    private List<HexCell> _pathToTravel;
+    private HexCell location, currentTravelLocation;
+
     const float rotationSpeed = 180f;
     const float travelSpeed = 4f;
 
     public static HexUnit unitPrefab;
 
+    public HexCell CellToTravel { get; private set; }
+    public bool InTravel { get; private set; }
     public HexGrid Grid { get; set; }
+
+    public event Action<HexUnit, HexCell> Treveled;
 
     public HexCell Location
     {
@@ -34,17 +45,15 @@ public class HexUnit : MonoBehaviour
         }
     }
 
-    HexCell location, currentTravelLocation;
-
     public float Orientation
     {
         get
         {
-            return orientation;
+            return _orientation;
         }
         set
         {
-            orientation = value;
+            _orientation = value;
             transform.localRotation = Quaternion.Euler(0f, value, 0f);
         }
     }
@@ -65,9 +74,42 @@ public class HexUnit : MonoBehaviour
         }
     }
 
-    float orientation;
+    private bool _turn = true;
 
-    List<HexCell> pathToTravel;
+    private void Start()
+    {
+        InTravel = false;
+    }
+
+    private void Update()
+    {
+        FindTravel();
+    }
+
+    private void FindTravel()
+    {
+        if (InTravel == false)
+        {
+            Collider[] cells = Physics.OverlapSphere(transform.position, 50f, _groundLayer);
+            int index;
+
+            do
+            {
+                index = UnityEngine.Random.Range(0, cells.Length - 1);
+                CellToTravel = cells[index].GetComponent<HexCell>();
+
+                if (CellToTravel == Location)
+                    return;
+
+            } while (CellToTravel.IsUnderwater == true);
+
+            if (_turn)
+            {
+                _turn = false;
+                Treveled?.Invoke(this, CellToTravel);
+            }
+        }
+    }
 
     public void ValidateLocation()
     {
@@ -76,27 +118,29 @@ public class HexUnit : MonoBehaviour
 
     public bool IsValidDestination(HexCell cell)
     {
-        return cell.IsExplored && !cell.IsUnderwater && !cell.Unit;
+        return !cell.IsUnderwater;
     }
 
     public void Travel(List<HexCell> path)
     {
+        _turn = true;
+        InTravel = true;
         location.Unit = null;
         location = path[path.Count - 1];
         location.Unit = this;
-        pathToTravel = path;
+        _pathToTravel = path;
         StopAllCoroutines();
         StartCoroutine(TravelPath());
     }
 
     IEnumerator TravelPath()
     {
-        Vector3 a, b, c = pathToTravel[0].Position;
-        yield return LookAt(pathToTravel[1].Position);
+        Vector3 a, b, c = _pathToTravel[0].Position;
+        yield return LookAt(_pathToTravel[1].Position);
 
         if (!currentTravelLocation)
         {
-            currentTravelLocation = pathToTravel[0];
+            currentTravelLocation = _pathToTravel[0];
         }
 
         Grid.DecreaseVisibility(currentTravelLocation, VisionRange);
@@ -104,11 +148,11 @@ public class HexUnit : MonoBehaviour
 
         float t = Time.deltaTime * travelSpeed;
 
-        for (int i = 1; i < pathToTravel.Count; i++)
+        for (int i = 1; i < _pathToTravel.Count; i++)
         {
-            currentTravelLocation = pathToTravel[i];
+            currentTravelLocation = _pathToTravel[i];
             a = c;
-            b = pathToTravel[i - 1].Position;
+            b = _pathToTravel[i - 1].Position;
 
             int nextColumn = currentTravelLocation.ColumnIndex;
             if (currentColumn != nextColumn)
@@ -129,7 +173,7 @@ public class HexUnit : MonoBehaviour
             }
 
             c = (b + currentTravelLocation.Position) * 0.5f;
-            Grid.IncreaseVisibility(pathToTravel[i], VisionRange);
+            Grid.IncreaseVisibility(_pathToTravel[i], VisionRange);
 
             for (; t < 1f; t += Time.deltaTime * travelSpeed)
             {
@@ -140,7 +184,7 @@ public class HexUnit : MonoBehaviour
                 yield return null;
             }
 
-            Grid.DecreaseVisibility(pathToTravel[i], VisionRange);
+            Grid.DecreaseVisibility(_pathToTravel[i], VisionRange);
             t -= 1f;
         }
 
@@ -161,9 +205,10 @@ public class HexUnit : MonoBehaviour
         }
 
         transform.localPosition = location.Position;
-        orientation = transform.localRotation.eulerAngles.y;
-        ListPool<HexCell>.Add(pathToTravel);
-        pathToTravel = null;
+        _orientation = transform.localRotation.eulerAngles.y;
+        ListPool<HexCell>.Add(_pathToTravel);
+        _pathToTravel = null;
+        InTravel = false;
     }
 
     private IEnumerator LookAt(Vector3 point)
@@ -202,7 +247,7 @@ public class HexUnit : MonoBehaviour
         }
 
         transform.LookAt(point);
-        orientation = transform.localRotation.eulerAngles.y;
+        _orientation = transform.localRotation.eulerAngles.y;
     }
 
     public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direction)
@@ -252,7 +297,7 @@ public class HexUnit : MonoBehaviour
     public void Save(BinaryWriter writer)
     {
         location.coordinates.Save(writer);
-        writer.Write(orientation);
+        writer.Write(_orientation);
     }
 
     public static void Load(BinaryReader reader, HexGrid grid)
