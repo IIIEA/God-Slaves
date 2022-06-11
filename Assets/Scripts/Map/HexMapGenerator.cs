@@ -9,6 +9,9 @@ public class HexMapGenerator : MonoBehaviour
 
     public int seed;
 
+    [Range(20f, 100f)]
+    [SerializeField] private float _spawnUnitChance;
+
     [Range(0f, 0.5f)]
     public float jitterProbability = 0.25f;
 
@@ -180,6 +183,8 @@ public class HexMapGenerator : MonoBehaviour
         {
             grid.GetCell(i).SearchPhase = 0;
         }
+
+        SpawnUnits();
 
         Random.state = originalRandomState;
     }
@@ -968,6 +973,22 @@ public class HexMapGenerator : MonoBehaviour
     private void SetFarmLevel()
     {
 
+    }
+
+    private void SpawnUnits()
+    {
+        for (int i = 0; i < cellCount; i++)
+        {
+            HexCell cell = grid.GetCell(i);
+
+            if (!cell.IsUnderwater)
+            {
+                if (Random.Range(0, 100) <= _spawnUnitChance)
+                {
+                    grid.AddUnit(Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f));
+                }
+            }
+        }
     }
 
     HexCell GetRandomCell(MapRegion region)

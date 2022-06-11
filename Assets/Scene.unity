@@ -15150,6 +15150,7 @@ MonoBehaviour:
   grid: {fileID: 1571186511}
   useFixedSeed: 0
   seed: 0
+  _spawnUnitChance: 20
   jitterProbability: 0.25
   chunkSizeMin: 30
   chunkSizeMax: 100
