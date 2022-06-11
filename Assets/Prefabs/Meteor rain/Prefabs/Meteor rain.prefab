@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 198893725621481234}
   - component: {fileID: 114854818432266442}
   - component: {fileID: 199088265089551654}
+  - component: {fileID: 6909091512757384006}
   m_Layer: 0
   m_Name: Meteor rain
   m_TagString: Untagged
@@ -4926,6 +4927,19 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &6909091512757384006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1221690919802312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea6f2eced424e134087ff6ef35669b1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _delay: 5
 --- !u!1 &1364433719918142
 GameObject:
   m_ObjectHideFlags: 0

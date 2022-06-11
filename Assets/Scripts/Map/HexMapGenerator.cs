@@ -995,7 +995,7 @@ public class HexMapGenerator : MonoBehaviour
             {
                 if (Random.Range(0, 100) <= _spawnUnitChance)
                 {
-                    grid.AddUnit(Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f));
+                    grid.AddUnit(Instantiate(UnitsHolder.GetRandomUnit()), cell, Random.Range(0f, 360f));
                 }
             }
         }
