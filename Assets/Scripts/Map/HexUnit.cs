@@ -113,13 +113,13 @@ public class HexUnit : MonoBehaviour
             {
                 if (nextColumn < currentColumn - 1)
                 {
-                    a.x -= HexMetrics.innerDiameter * HexMetrics.wrapSize;
-                    b.x -= HexMetrics.innerDiameter * HexMetrics.wrapSize;
+                    a.x -= HexMetrics.InnerDiameter * HexMetrics.wrapSize;
+                    b.x -= HexMetrics.InnerDiameter * HexMetrics.wrapSize;
                 }
                 else if (nextColumn > currentColumn + 1)
                 {
-                    a.x += HexMetrics.innerDiameter * HexMetrics.wrapSize;
-                    b.x += HexMetrics.innerDiameter * HexMetrics.wrapSize;
+                    a.x += HexMetrics.InnerDiameter * HexMetrics.wrapSize;
+                    b.x += HexMetrics.InnerDiameter * HexMetrics.wrapSize;
                 }
                 Grid.MakeChildOfColumn(transform, nextColumn);
                 currentColumn = nextColumn;
@@ -165,13 +165,13 @@ public class HexUnit : MonoBehaviour
         if (HexMetrics.Wrapping)
         {
             float xDistance = point.x - transform.localPosition.x;
-            if (xDistance < -HexMetrics.innerRadius * HexMetrics.wrapSize)
+            if (xDistance < -HexMetrics.InnerRadius * HexMetrics.wrapSize)
             {
-                point.x += HexMetrics.innerDiameter * HexMetrics.wrapSize;
+                point.x += HexMetrics.InnerDiameter * HexMetrics.wrapSize;
             }
-            else if (xDistance > HexMetrics.innerRadius * HexMetrics.wrapSize)
+            else if (xDistance > HexMetrics.InnerRadius * HexMetrics.wrapSize)
             {
-                point.x -= HexMetrics.innerDiameter * HexMetrics.wrapSize;
+                point.x -= HexMetrics.InnerDiameter * HexMetrics.wrapSize;
             }
         }
 

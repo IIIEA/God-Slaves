@@ -4,33 +4,13 @@ using System.IO;
 [System.Serializable]
 public struct HexCoordinates
 {
+    [SerializeField] private int x, z;
 
-    [SerializeField]
-    private int x, z;
+    public int X => x;
 
-    public int X
-    {
-        get
-        {
-            return x;
-        }
-    }
+    public int Z => z;
 
-    public int Z
-    {
-        get
-        {
-            return z;
-        }
-    }
-
-    public int Y
-    {
-        get
-        {
-            return -X - Z;
-        }
-    }
+    public int Y => -X - Z;
 
     public HexCoordinates(int x, int z)
     {
@@ -46,22 +26,20 @@ public struct HexCoordinates
                 x -= HexMetrics.wrapSize;
             }
         }
+
         this.x = x;
         this.z = z;
     }
 
     public int DistanceTo(HexCoordinates other)
     {
-        int xy =
-            (x < other.x ? other.x - x : x - other.x) +
-            (Y < other.Y ? other.Y - Y : Y - other.Y);
+        int xy = (x < other.x ? other.x - x : x - other.x) + (Y < other.Y ? other.Y - Y : Y - other.Y);
 
         if (HexMetrics.Wrapping)
         {
             other.x += HexMetrics.wrapSize;
-            int xyWrapped =
-                (x < other.x ? other.x - x : x - other.x) +
-                (Y < other.Y ? other.Y - Y : Y - other.Y);
+            int xyWrapped = (x < other.x ? other.x - x : x - other.x) + (Y < other.Y ? other.Y - Y : Y - other.Y);
+
             if (xyWrapped < xy)
             {
                 xy = xyWrapped;
@@ -69,9 +47,8 @@ public struct HexCoordinates
             else
             {
                 other.x -= 2 * HexMetrics.wrapSize;
-                xyWrapped =
-                    (x < other.x ? other.x - x : x - other.x) +
-                    (Y < other.Y ? other.Y - Y : Y - other.Y);
+                xyWrapped = (x < other.x ? other.x - x : x - other.x) + (Y < other.Y ? other.Y - Y : Y - other.Y);
+
                 if (xyWrapped < xy)
                 {
                     xy = xyWrapped;
@@ -89,10 +66,10 @@ public struct HexCoordinates
 
     public static HexCoordinates FromPosition(Vector3 position)
     {
-        float x = position.x / HexMetrics.innerDiameter;
+        float x = position.x / HexMetrics.InnerDiameter;
         float y = -x;
 
-        float offset = position.z / (HexMetrics.outerRadius * 3f);
+        float offset = position.z / (HexMetrics.OuterRadius * 3f);
         x -= offset;
         y -= offset;
 
@@ -121,8 +98,7 @@ public struct HexCoordinates
 
     public override string ToString()
     {
-        return "(" +
-            X.ToString() + ", " + Y.ToString() + ", " + Z.ToString() + ")";
+        return "(" + X.ToString() + ", " + Y.ToString() + ", " + Z.ToString() + ")";
     }
 
     public string ToStringOnSeparateLines()

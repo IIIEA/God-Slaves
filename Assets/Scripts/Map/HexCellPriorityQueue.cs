@@ -2,58 +2,56 @@
 
 public class HexCellPriorityQueue
 {
+    private List<HexCell> _list = new List<HexCell>();
+    private int _count = 0;
+    private int _minimum = int.MaxValue;
 
-    List<HexCell> list = new List<HexCell>();
-
-    int count = 0;
-    int minimum = int.MaxValue;
-
-    public int Count
-    {
-        get
-        {
-            return count;
-        }
-    }
+    public int Count => _count;
 
     public void Enqueue(HexCell cell)
     {
-        count += 1;
+        _count += 1;
         int priority = cell.SearchPriority;
-        if (priority < minimum)
+
+        if (priority < _minimum)
         {
-            minimum = priority;
+            _minimum = priority;
         }
-        while (priority >= list.Count)
+        while (priority >= _list.Count)
         {
-            list.Add(null);
+            _list.Add(null);
         }
-        cell.NextWithSamePriority = list[priority];
-        list[priority] = cell;
+
+        cell.NextWithSamePriority = _list[priority];
+        _list[priority] = cell;
     }
 
     public HexCell Dequeue()
     {
-        count -= 1;
-        for (; minimum < list.Count; minimum++)
+        _count -= 1;
+
+        for (; _minimum < _list.Count; _minimum++)
         {
-            HexCell cell = list[minimum];
+            HexCell cell = _list[_minimum];
+
             if (cell != null)
             {
-                list[minimum] = cell.NextWithSamePriority;
+                _list[_minimum] = cell.NextWithSamePriority;
                 return cell;
             }
         }
+
         return null;
     }
 
     public void Change(HexCell cell, int oldPriority)
     {
-        HexCell current = list[oldPriority];
+        HexCell current = _list[oldPriority];
         HexCell next = current.NextWithSamePriority;
+
         if (current == cell)
         {
-            list[oldPriority] = next;
+            _list[oldPriority] = next;
         }
         else
         {
@@ -64,14 +62,15 @@ public class HexCellPriorityQueue
             }
             current.NextWithSamePriority = cell.NextWithSamePriority;
         }
+
         Enqueue(cell);
-        count -= 1;
+        _count -= 1;
     }
 
     public void Clear()
     {
-        list.Clear();
-        count = 0;
-        minimum = int.MaxValue;
+        _list.Clear();
+        _count = 0;
+        _minimum = int.MaxValue;
     }
 }

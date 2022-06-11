@@ -2,72 +2,47 @@
 
 public static class HexMetrics
 {
+    public const float OuterToInner = 0.866025404f;
+    public const float InnerToOuter = 1f / OuterToInner;
+    public const float OuterRadius = 10f;
+    public const float InnerRadius = OuterRadius * OuterToInner;
+    public const float InnerDiameter = InnerRadius * 2f;
+    public const float SolidFactor = 0.8f;
+    public const float BlendFactor = 1f - SolidFactor;
+    public const float WaterFactor = 0.6f;
+    public const float WaterBlendFactor = 1f - WaterFactor;
+    public const float ElevationStep = 3f;
+    public const int TerracesPerSlope = 2;
+    public const int TerraceSteps = TerracesPerSlope * 2 + 1;
+    public const float HorizontalTerraceStepSize = 1f / TerraceSteps;
+    public const float VerticalTerraceStepSize = 1f / (TerracesPerSlope + 1);
+    public const float CellPerturbStrength = 4f;
+    public const float ElevationPerturbStrength = 1.5f;
+    public const float StreamBedElevationOffset = -1.75f;
+    public const float WaterElevationOffset = -0.5f;
+    public const float WallHeight = 4f;
+    public const float WallYOffset = -1f;
+    public const float WallThickness = 0.75f;
+    public const float WallElevationOffset = VerticalTerraceStepSize;
+    public const float WallTowerThreshold = 0.5f;
+    public const float BridgeDesignLength = 7f;
+    public const float NoiseScale = 0.003f;
+    public const int ChunkSizeX = 5, chunkSizeZ = 5;
+    public const int HashGridSize = 256;
+    public const float HashGridScale = 0.25f;
 
-    public const float outerToInner = 0.866025404f;
-    public const float innerToOuter = 1f / outerToInner;
+    private static HexHash[] _hashGrid;
 
-    public const float outerRadius = 10f;
-
-    public const float innerRadius = outerRadius * outerToInner;
-
-    public const float innerDiameter = innerRadius * 2f;
-
-    public const float solidFactor = 0.8f;
-
-    public const float blendFactor = 1f - solidFactor;
-
-    public const float waterFactor = 0.6f;
-
-    public const float waterBlendFactor = 1f - waterFactor;
-
-    public const float elevationStep = 3f;
-
-    public const int terracesPerSlope = 2;
-
-    public const int terraceSteps = terracesPerSlope * 2 + 1;
-
-    public const float horizontalTerraceStepSize = 1f / terraceSteps;
-
-    public const float verticalTerraceStepSize = 1f / (terracesPerSlope + 1);
-
-    public const float cellPerturbStrength = 4f;
-
-    public const float elevationPerturbStrength = 1.5f;
-
-    public const float streamBedElevationOffset = -1.75f;
-
-    public const float waterElevationOffset = -0.5f;
-
-    public const float wallHeight = 4f;
-
-    public const float wallYOffset = -1f;
-
-    public const float wallThickness = 0.75f;
-
-    public const float wallElevationOffset = verticalTerraceStepSize;
-
-    public const float wallTowerThreshold = 0.5f;
-
-    public const float bridgeDesignLength = 7f;
-
-    public const float noiseScale = 0.003f;
-
-    public const int chunkSizeX = 5, chunkSizeZ = 5;
-
-    public const int hashGridSize = 256;
-
-    public const float hashGridScale = 0.25f;
-
-    static HexHash[] hashGrid;
+    public static Texture2D NoiseSource;
 
     static Vector3[] corners = {
-        new Vector3(0f, 0f, outerRadius),
-        new Vector3(innerRadius, 0f, 0.5f * outerRadius),
-        new Vector3(innerRadius, 0f, -0.5f * outerRadius),
-        new Vector3(0f, 0f, -outerRadius),
-        new Vector3(-innerRadius, 0f, -0.5f * outerRadius),
-        new Vector3(-innerRadius, 0f, 0.5f * outerRadius),
-        new Vector3(0f, 0f, outerRadius)
+        new Vector3(0f, 0f, OuterRadius),
+        new Vector3(InnerRadius, 0f, 0.5f * OuterRadius),
+        new Vector3(InnerRadius, 0f, -0.5f * OuterRadius),
+        new Vector3(0f, 0f, -OuterRadius),
+        new Vector3(-InnerRadius, 0f, -0.5f * OuterRadius),
+        new Vector3(-InnerRadius, 0f, 0.5f * OuterRadius),
+        new Vector3(0f, 0f, OuterRadius)
     };
 
     static float[][] featureThresholds = {
@@ -76,24 +51,15 @@ public static class HexMetrics
         new float[] {0.4f, 0.6f, 0.8f}
     };
 
-    public static Texture2D noiseSource;
-
     public static Vector4 SampleNoise(Vector3 position)
     {
-        Vector4 sample = noiseSource.GetPixelBilinear(
-            position.x * noiseScale,
-            position.z * noiseScale
-        );
+        Vector4 sample = NoiseSource.GetPixelBilinear(position.x * NoiseScale, position.z * NoiseScale);
 
-        if (Wrapping && position.x < innerDiameter * 1.5f)
+        if (Wrapping && position.x < InnerDiameter * 1.5f)
         {
-            Vector4 sample2 = noiseSource.GetPixelBilinear(
-                (position.x + wrapSize * innerDiameter) * noiseScale,
-                position.z * noiseScale
-            );
-            sample = Vector4.Lerp(
-                sample2, sample, position.x * (1f / innerDiameter) - 0.5f
-            );
+            Vector4 sample2 = NoiseSource.GetPixelBilinear((position.x + wrapSize * InnerDiameter) * NoiseScale, position.z * NoiseScale);
+
+            sample = Vector4.Lerp(sample2, sample, position.x * (1f / InnerDiameter) - 0.5f);
         }
 
         return sample;
@@ -101,39 +67,39 @@ public static class HexMetrics
 
     public static int wrapSize;
 
-    public static bool Wrapping
-    {
-        get
-        {
-            return wrapSize > 0;
-        }
-    }
+    public static bool Wrapping => wrapSize > 0;
 
     public static void InitializeHashGrid(int seed)
     {
-        hashGrid = new HexHash[hashGridSize * hashGridSize];
+        _hashGrid = new HexHash[HashGridSize * HashGridSize];
         Random.State currentState = Random.state;
         Random.InitState(seed);
-        for (int i = 0; i < hashGrid.Length; i++)
+
+        for (int i = 0; i < _hashGrid.Length; i++)
         {
-            hashGrid[i] = HexHash.Create();
+            _hashGrid[i] = HexHash.Create();
         }
+
         Random.state = currentState;
     }
 
     public static HexHash SampleHashGrid(Vector3 position)
     {
-        int x = (int)(position.x * hashGridScale) % hashGridSize;
+        int x = (int)(position.x * HashGridScale) % HashGridSize;
+
         if (x < 0)
         {
-            x += hashGridSize;
+            x += HashGridSize;
         }
-        int z = (int)(position.z * hashGridScale) % hashGridSize;
+
+        int z = (int)(position.z * HashGridScale) % HashGridSize;
+
         if (z < 0)
         {
-            z += hashGridSize;
+            z += HashGridSize;
         }
-        return hashGrid[x + z * hashGridSize];
+
+        return _hashGrid[x + z * HashGridSize];
     }
 
     public static float[] GetFeatureThresholds(int level)
@@ -153,56 +119,52 @@ public static class HexMetrics
 
     public static Vector3 GetFirstSolidCorner(HexDirection direction)
     {
-        return corners[(int)direction] * solidFactor;
+        return corners[(int)direction] * SolidFactor;
     }
 
     public static Vector3 GetSecondSolidCorner(HexDirection direction)
     {
-        return corners[(int)direction + 1] * solidFactor;
+        return corners[(int)direction + 1] * SolidFactor;
     }
 
     public static Vector3 GetSolidEdgeMiddle(HexDirection direction)
     {
-        return
-            (corners[(int)direction] + corners[(int)direction + 1]) *
-            (0.5f * solidFactor);
+        return (corners[(int)direction] + corners[(int)direction + 1]) * (0.5f * SolidFactor);
     }
 
     public static Vector3 GetFirstWaterCorner(HexDirection direction)
     {
-        return corners[(int)direction] * waterFactor;
+        return corners[(int)direction] * WaterFactor;
     }
 
     public static Vector3 GetSecondWaterCorner(HexDirection direction)
     {
-        return corners[(int)direction + 1] * waterFactor;
+        return corners[(int)direction + 1] * WaterFactor;
     }
 
     public static Vector3 GetBridge(HexDirection direction)
     {
-        return (corners[(int)direction] + corners[(int)direction + 1]) *
-            blendFactor;
+        return (corners[(int)direction] + corners[(int)direction + 1]) * BlendFactor;
     }
 
     public static Vector3 GetWaterBridge(HexDirection direction)
     {
-        return (corners[(int)direction] + corners[(int)direction + 1]) *
-            waterBlendFactor;
+        return (corners[(int)direction] + corners[(int)direction + 1]) * WaterBlendFactor;
     }
 
     public static Vector3 TerraceLerp(Vector3 a, Vector3 b, int step)
     {
-        float h = step * HexMetrics.horizontalTerraceStepSize;
+        float h = step * HorizontalTerraceStepSize;
         a.x += (b.x - a.x) * h;
         a.z += (b.z - a.z) * h;
-        float v = ((step + 1) / 2) * HexMetrics.verticalTerraceStepSize;
+        float v = ((step + 1) / 2) * VerticalTerraceStepSize;
         a.y += (b.y - a.y) * v;
         return a;
     }
 
     public static Color TerraceLerp(Color a, Color b, int step)
     {
-        float h = step * HexMetrics.horizontalTerraceStepSize;
+        float h = step * HorizontalTerraceStepSize;
         return Color.Lerp(a, b, h);
     }
 
@@ -210,9 +172,8 @@ public static class HexMetrics
     {
         near.x += (far.x - near.x) * 0.5f;
         near.z += (far.z - near.z) * 0.5f;
-        float v =
-            near.y < far.y ? wallElevationOffset : (1f - wallElevationOffset);
-        near.y += (far.y - near.y) * v + wallYOffset;
+        float v = near.y < far.y ? WallElevationOffset : (1f - WallElevationOffset);
+        near.y += (far.y - near.y) * v + WallYOffset;
         return near;
     }
 
@@ -222,7 +183,7 @@ public static class HexMetrics
         offset.x = far.x - near.x;
         offset.y = 0f;
         offset.z = far.z - near.z;
-        return offset.normalized * (wallThickness * 0.5f);
+        return offset.normalized * (WallThickness * 0.5f);
     }
 
     public static HexEdgeType GetEdgeType(int elevation1, int elevation2)
@@ -231,19 +192,22 @@ public static class HexMetrics
         {
             return HexEdgeType.Flat;
         }
+
         int delta = elevation2 - elevation1;
+
         if (delta == 1 || delta == -1)
         {
             return HexEdgeType.Slope;
         }
+
         return HexEdgeType.Cliff;
     }
 
     public static Vector3 Perturb(Vector3 position)
     {
         Vector4 sample = SampleNoise(position);
-        position.x += (sample.x * 2f - 1f) * cellPerturbStrength;
-        position.z += (sample.z * 2f - 1f) * cellPerturbStrength;
+        position.x += (sample.x * 2f - 1f) * CellPerturbStrength;
+        position.z += (sample.z * 2f - 1f) * CellPerturbStrength;
         return position;
     }
 }

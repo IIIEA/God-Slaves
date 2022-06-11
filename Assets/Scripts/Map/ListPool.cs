@@ -2,7 +2,6 @@
 
 public static class ListPool<T>
 {
-
     static Stack<List<T>> stack = new Stack<List<T>>();
 
     public static List<T> Get()
@@ -11,6 +10,7 @@ public static class ListPool<T>
         {
             return stack.Pop();
         }
+
         return new List<T>();
     }
 

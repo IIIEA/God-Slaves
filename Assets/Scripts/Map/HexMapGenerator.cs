@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class HexMapGenerator : MonoBehaviour
 {
-
     public HexGrid grid;
 
     public bool useFixedSeed;
