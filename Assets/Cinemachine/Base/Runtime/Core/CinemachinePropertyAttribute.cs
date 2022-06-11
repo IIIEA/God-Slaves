@@ -8,7 +8,7 @@ namespace Cinemachine
     public sealed class LensSettingsPropertyAttribute : PropertyAttribute
     {
     }
-    
+
     /// <summary>
     /// Property applied to CinemachineBlendDefinition.  Used for custom drawing in the inspector.
     /// </summary>
@@ -46,14 +46,14 @@ namespace Cinemachine
     public sealed class DocumentationSortingAttribute : System.Attribute
     {
         /// <summary>Refinement level of the documentation</summary>
-        public enum Level 
-        { 
+        public enum Level
+        {
             /// <summary>Type is excluded from documentation</summary>
-            Undoc, 
+            Undoc,
             /// <summary>Type is documented in the API reference</summary>
-            API, 
+            API,
             /// <summary>Type is documented in the highly-refined User Manual</summary>
-            UserRef 
+            UserRef
         };
         /// <summary>Where this type appears in the manual.  Smaller number sort earlier.</summary>
         public float SortOrder { get; private set; }

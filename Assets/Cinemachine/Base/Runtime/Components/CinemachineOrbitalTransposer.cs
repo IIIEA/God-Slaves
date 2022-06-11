@@ -116,7 +116,7 @@ namespace Cinemachine
             public float m_RecenteringTime;
 
             /// <summary>Constructor with specific field values</summary>
-            public Recentering(bool enabled, float recenterWaitTime,  float recenteringSpeed)
+            public Recentering(bool enabled, float recenterWaitTime, float recenteringSpeed)
             {
                 m_enabled = enabled;
                 m_RecenterWaitTime = recenterWaitTime;
@@ -163,7 +163,7 @@ namespace Cinemachine
         protected override void OnValidate()
         {
             // Upgrade after a legacy deserialize
-            if (m_LegacyRadius != float.MaxValue 
+            if (m_LegacyRadius != float.MaxValue
                 && m_LegacyHeightOffset != float.MaxValue
                 && m_LegacyHeadingBias != float.MaxValue)
             {
@@ -203,9 +203,10 @@ namespace Cinemachine
         /// private AxisState object, and that AxisState object will be updated and
         /// used to calculate the heading.
         /// </summary>
-        internal UpdateHeadingDelegate HeadingUpdater 
-            = (CinemachineOrbitalTransposer orbital, float deltaTime, Vector3 up) 
-                => { return orbital.UpdateHeading(deltaTime, up, ref orbital.m_XAxis); };
+        internal UpdateHeadingDelegate HeadingUpdater
+            = (CinemachineOrbitalTransposer orbital, float deltaTime, Vector3 up)
+                =>
+            { return orbital.UpdateHeading(deltaTime, up, ref orbital.m_XAxis); };
 
         /// <summary>
         /// Update the X axis and calculate the heading.  This can be called by a delegate
@@ -255,7 +256,7 @@ namespace Cinemachine
                             axis.Value = targetHeading;
                             mHeadingRecenteringVelocity = 0;
                         }
-                        else 
+                        else
                         {
                             float scale = deltaTime / recenterTime;
                             float desiredVelocity = Mathf.Sign(headingError)
@@ -353,7 +354,7 @@ namespace Cinemachine
             m_FollowOffset += localOffset;
             m_FollowOffset = EffectiveOffset;
         }
-        
+
         static string GetFullName(GameObject current)
         {
             if (current == null)
@@ -519,7 +520,7 @@ namespace Cinemachine
                 if (mWeightSum > UnityVectorExtensions.Epsilon
                     && (mCount == mHistory.Length || mLastGoodHeading.AlmostZero()))
                 {
-                    Vector3  h = mHeadingSum / mWeightSum;
+                    Vector3 h = mHeadingSum / mWeightSum;
                     if (!h.AlmostZero())
                         mLastGoodHeading = h.normalized;
                 }

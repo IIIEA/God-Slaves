@@ -42,7 +42,7 @@ namespace Cinemachine
             m_HorizontalAxis.SetThresholds(-180f, 180f, true);
             m_VerticalAxis.SetThresholds(-90, 90, false);
         }
-        
+
         /// <summary>Applies the axis values and orients the camera accordingly</summary>
         /// <param name="curState">The current camera state</param>
         /// <param name="deltaTime">Used for calculating damping.  Not used.</param>

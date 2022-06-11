@@ -303,7 +303,7 @@ namespace Cinemachine
             if (deltaTime < 0)
             {
                 m_Predictor.Reset();
-                m_PreviousCameraPosition = curState.RawPosition 
+                m_PreviousCameraPosition = curState.RawPosition
                     + (curState.RawOrientation * Vector3.back) * m_CameraDistance;
             }
             if (!IsValid)
@@ -314,7 +314,7 @@ namespace Cinemachine
             curState.ReferenceLookAt = FollowTarget.position;
             m_Predictor.Smoothing = m_LookaheadSmoothing;
             m_Predictor.AddPosition(curState.ReferenceLookAt);
-            TrackedPoint = (m_LookaheadTime > 0) 
+            TrackedPoint = (m_LookaheadTime > 0)
                 ? m_Predictor.PredictPosition(m_LookaheadTime) : curState.ReferenceLookAt;
 
             // Work in camera-local space
@@ -325,8 +325,8 @@ namespace Cinemachine
 
             // Move along camera z
             Vector3 cameraOffset = Vector3.zero;
-            float cameraMin = Mathf.Max(kMinimumCameraDistance, m_CameraDistance - m_DeadZoneDepth/2);
-            float cameraMax = Mathf.Max(cameraMin, m_CameraDistance + m_DeadZoneDepth/2);
+            float cameraMin = Mathf.Max(kMinimumCameraDistance, m_CameraDistance - m_DeadZoneDepth / 2);
+            float cameraMax = Mathf.Max(cameraMin, m_CameraDistance + m_DeadZoneDepth / 2);
             if (targetPos.z < cameraMin)
                 cameraOffset.z = targetPos.z - cameraMin;
             if (targetPos.z > cameraMax)
@@ -340,8 +340,8 @@ namespace Cinemachine
 
             // Move along the XY plane
             targetPos.z -= cameraOffset.z;
-            float screenSize = curState.Lens.Orthographic 
-                ? curState.Lens.OrthographicSize 
+            float screenSize = curState.Lens.Orthographic
+                ? curState.Lens.OrthographicSize
                 : Mathf.Tan(0.5f * curState.Lens.FieldOfView * Mathf.Deg2Rad) * targetPos.z;
             Rect softGuideOrtho = ScreenToOrtho(SoftGuideRect, screenSize, curState.Lens.Aspect);
             if (deltaTime < 0)
@@ -376,8 +376,8 @@ namespace Cinemachine
         private Rect ScreenToOrtho(Rect rScreen, float orthoSize, float aspect)
         {
             Rect r = new Rect();
-            r.yMax = 2 * orthoSize * ((1f-rScreen.yMin) - 0.5f);
-            r.yMin = 2 * orthoSize * ((1f-rScreen.yMax) - 0.5f);
+            r.yMax = 2 * orthoSize * ((1f - rScreen.yMin) - 0.5f);
+            r.yMin = 2 * orthoSize * ((1f - rScreen.yMax) - 0.5f);
             r.xMin = 2 * orthoSize * aspect * (rScreen.xMin - 0.5f);
             r.xMax = 2 * orthoSize * aspect * (rScreen.xMax - 0.5f);
             return r;
@@ -407,8 +407,8 @@ namespace Cinemachine
         public Matrix4x4 m_lastBoundsMatrix { get; private set; }
 
         /// <summary>Get Follow target as CinemachineTargetGroup, or null if target is not a group</summary>
-        public CinemachineTargetGroup TargetGroup 
-        { 
+        public CinemachineTargetGroup TargetGroup
+        {
             get
             {
                 Transform follow = FollowTarget;
@@ -419,7 +419,7 @@ namespace Cinemachine
         }
 
         float AdjustCameraDepthAndLensForGroupFraming(
-            CinemachineTargetGroup group, float targetZ, 
+            CinemachineTargetGroup group, float targetZ,
             ref CameraState curState, float deltaTime)
         {
             float cameraOffset = 0;
@@ -446,7 +446,7 @@ namespace Cinemachine
             if (!curState.Lens.Orthographic && m_AdjustmentMode != AdjustmentMode.ZoomOnly)
             {
                 // What distance would be needed to get the target height, at the current FOV
-                float desiredDistance 
+                float desiredDistance
                     = targetHeight / (2f * Mathf.Tan(curState.Lens.FieldOfView * Mathf.Deg2Rad / 2f));
 
                 // target the near surface of the bounding box
@@ -489,7 +489,7 @@ namespace Cinemachine
                 default:
                 case FramingMode.HorizontalAndVertical:
                     return Mathf.Max(
-                        b.size.x / (framingSize * VcamState.Lens.Aspect), 
+                        b.size.x / (framingSize * VcamState.Lens.Aspect),
                         b.size.y / framingSize);
             }
         }

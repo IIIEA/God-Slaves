@@ -61,11 +61,11 @@ namespace Cinemachine
         public float m_CameraRadius = 0.1f;
 
         /// <summary>The way in which the Collider will attempt to preserve sight of the target.</summary>
-        public enum ResolutionStrategy 
-        { 
+        public enum ResolutionStrategy
+        {
             /// <summary>Camera will be pulled forward along its Z axis until it is in front of 
             /// the nearest obstacle</summary>
-            PullCameraForward, 
+            PullCameraForward,
             /// <summary>In addition to pulling the camera forward, an effort will be made to 
             /// return the camera to its original height</summary>
             PreserveCameraHeight,
@@ -156,10 +156,10 @@ namespace Cinemachine
         };
 
         /// <summary>Inspector API for debugging collision resolution path</summary>
-        public List<List<Vector3>> DebugPaths 
+        public List<List<Vector3>> DebugPaths
         {
             get
-            { 
+            {
                 List<List<Vector3>> list = new List<List<Vector3>>();
                 List<VcamExtraState> extraStates = GetAllExtraStates<VcamExtraState>();
                 foreach (var v in extraStates)
@@ -269,7 +269,7 @@ namespace Cinemachine
                             if (m_Strategy != ResolutionStrategy.PullCameraForward)
                             {
                                 pos = PushCameraBack(
-                                    pos, dir, hitInfo, lookAtPos, 
+                                    pos, dir, hitInfo, lookAtPos,
                                     new Plane(state.ReferenceUp, cameraPos),
                                     targetDistance, m_MaximumEffort, ref extra);
                             }
@@ -288,7 +288,7 @@ namespace Cinemachine
         private bool RaycastIgnoreTag(Ray ray, out RaycastHit hitInfo, float rayLength)
         {
             while (Physics.Raycast(
-                ray, out hitInfo, rayLength, m_CollideAgainst.value, 
+                ray, out hitInfo, rayLength, m_CollideAgainst.value,
                 QueryTriggerInteraction.Ignore))
             {
                 if (m_IgnoreTag.Length == 0 || !hitInfo.collider.CompareTag(m_IgnoreTag))
@@ -305,7 +305,7 @@ namespace Cinemachine
             }
             return false;
         }
-        
+
         private Vector3 PushCameraBack(
             Vector3 currentPos, Vector3 pushDir, RaycastHit obstacle,
             Vector3 lookAtPos, Plane startPlane, float targetDistance, int iterations,
@@ -335,9 +335,9 @@ namespace Cinemachine
                 extra.AddPointToDebugPath(pos);
                 if (iterations > 1)
                     pos = PushCameraBack(
-                        pos, dir, hitInfo, 
-                        lookAtPos, startPlane, 
-                        targetDistance, iterations-1, ref extra);
+                        pos, dir, hitInfo,
+                        lookAtPos, startPlane,
+                        targetDistance, iterations - 1, ref extra);
 
                 return pos;
             }
@@ -363,7 +363,7 @@ namespace Cinemachine
                     pos = ray.GetPoint(distance); // no obstacles - all good
                     extra.AddPointToDebugPath(pos);
                 }
-                else 
+                else
                 {
                     // We hit something.  Stop there and maybe take a step along that wall
                     float adjustment = hitInfo.distance - PrecisionSlush;
@@ -371,8 +371,8 @@ namespace Cinemachine
                     extra.AddPointToDebugPath(pos);
                     if (iterations > 1)
                         pos = PushCameraBack(
-                            pos, dir, hitInfo, lookAtPos, startPlane, 
-                            targetDistance, iterations-1, ref extra);
+                            pos, dir, hitInfo, lookAtPos, startPlane,
+                            targetDistance, iterations - 1, ref extra);
                 }
             }
             return pos;
@@ -387,7 +387,7 @@ namespace Cinemachine
             // Check for nearby obstacles.  Are we in a corner?
             float nearbyDistance = PrecisionSlush * 5;
             int numFound = Physics.SphereCastNonAlloc(
-                pos, nearbyDistance, pushDir.normalized, m_CornerBuffer, 0, 
+                pos, nearbyDistance, pushDir.normalized, m_CornerBuffer, 0,
                 m_CollideAgainst.value, QueryTriggerInteraction.Ignore);
             if (numFound > 1)
             {
@@ -397,8 +397,8 @@ namespace Cinemachine
                     if (m_IgnoreTag.Length > 0 && m_CornerBuffer[i].collider.CompareTag(m_IgnoreTag))
                         continue;
                     Type type = m_CornerBuffer[i].collider.GetType();
-                    if (type == typeof(BoxCollider) 
-                        || type == typeof(SphereCollider) 
+                    if (type == typeof(BoxCollider)
+                        || type == typeof(SphereCollider)
                         || type == typeof(CapsuleCollider))
                     {
                         Vector3 p = m_CornerBuffer[i].collider.ClosestPoint(pos);
@@ -410,7 +410,7 @@ namespace Cinemachine
                             {
                                 if (!(m_CornerBuffer[i].normal - obstacle.normal).AlmostZero())
                                     normal2 = m_CornerBuffer[i].normal;
-                                    break;
+                                break;
                             }
                         }
                     }
@@ -421,7 +421,7 @@ namespace Cinemachine
             Vector3 dir = Vector3.Cross(obstacle.normal, normal2);
             if (dir.AlmostZero())
                 dir = Vector3.ProjectOnPlane(pushDir, obstacle.normal);
-            else 
+            else
             {
                 float dot = Vector3.Dot(dir, pushDir);
                 if (Mathf.Abs(dot) < Epsilon)
@@ -458,7 +458,7 @@ namespace Cinemachine
                 distance = Mathf.Lerp(0, distance, angle / AngleThreshold);
             return distance;
         }
-                
+
         float ClampRayToBounds(Ray ray, float distance, Bounds bounds)
         {
             float d;
@@ -504,7 +504,7 @@ namespace Cinemachine
         {
             Vector3 result = Vector3.zero;
             int numObstacles = Physics.OverlapSphereNonAlloc(
-                cameraPos, m_CameraRadius, mColliderBuffer, 
+                cameraPos, m_CameraRadius, mColliderBuffer,
                 m_CollideAgainst, QueryTriggerInteraction.Ignore);
             if (numObstacles > 0)
             {
@@ -525,7 +525,7 @@ namespace Cinemachine
                     Vector3 dir;
                     float distance;
                     if (Physics.ComputePenetration(
-                        mCameraCollider, cameraPos, Quaternion.identity, 
+                        mCameraCollider, cameraPos, Quaternion.identity,
                         c, c.transform.position, c.transform.rotation,
                         out dir, out distance))
                     {

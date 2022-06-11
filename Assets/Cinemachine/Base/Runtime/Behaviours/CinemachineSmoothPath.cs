@@ -20,7 +20,8 @@ namespace Cinemachine
 
         /// <summary>A waypoint along the path</summary>
         [DocumentationSorting(18.7f, DocumentationSortingAttribute.Level.UserRef)]
-        [Serializable] public struct Waypoint
+        [Serializable]
+        public struct Waypoint
         {
             /// <summary>Position in path-local space</summary>
             [Tooltip("Position in path-local space")]
@@ -90,7 +91,7 @@ namespace Cinemachine
         void UpdateControlPoints()
         {
             int numPoints = (m_Waypoints == null) ? 0 : m_Waypoints.Length;
-            if (numPoints > 1 
+            if (numPoints > 1
                 && (Looped != m_IsLoopedCache
                     || m_ControlPoints1 == null || m_ControlPoints1.Length != numPoints
                     || m_ControlPoints2 == null || m_ControlPoints2.Length != numPoints))
@@ -137,7 +138,7 @@ namespace Cinemachine
                 {
                     if (Looped)
                         indexB = 0;
-                    else 
+                    else
                     {
                         --indexB;
                         --indexA;
@@ -161,7 +162,7 @@ namespace Cinemachine
                 if (indexA == indexB)
                     result = m_Waypoints[indexA].position;
                 else
-                    result = SplineHelpers.Bezier3(pos - indexA, 
+                    result = SplineHelpers.Bezier3(pos - indexA,
                         m_Waypoints[indexA].position, m_ControlPoints1[indexA].position,
                         m_ControlPoints2[indexA].position, m_Waypoints[indexB].position);
             }

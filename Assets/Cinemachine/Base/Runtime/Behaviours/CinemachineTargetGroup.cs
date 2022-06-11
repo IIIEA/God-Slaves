@@ -18,7 +18,8 @@ namespace Cinemachine
     {
         /// <summary>Holds the information that represents a member of the group</summary>
         [DocumentationSorting(19.1f, DocumentationSortingAttribute.Level.UserRef)]
-        [Serializable] public struct Target
+        [Serializable]
+        public struct Target
         {
             /// <summary>The target objects.  This object's position and orientation will contribute to the 
             /// group's average position and orientation, in accordance with its weight</summary>
@@ -93,7 +94,7 @@ namespace Cinemachine
                 float averageWeight;
                 Vector3 center = CalculateAveragePosition(out averageWeight);
                 bool gotOne = false;
-                Bounds b = new Bounds(center, new Vector3(m_lastRadius*2, m_lastRadius*2, m_lastRadius*2));
+                Bounds b = new Bounds(center, new Vector3(m_lastRadius * 2, m_lastRadius * 2, m_lastRadius * 2));
                 if (averageWeight > UnityVectorExtensions.Epsilon)
                 {
                     for (int i = 0; i < m_Targets.Length; ++i)
@@ -123,9 +124,9 @@ namespace Cinemachine
         }
 
         /// <summary>Return true if there are no members with weight > 0</summary>
-        public bool IsEmpty 
+        public bool IsEmpty
         {
-            get 
+            get
             {
                 for (int i = 0; i < m_Targets.Length; ++i)
                     if (m_Targets[i].target != null && m_Targets[i].weight > UnityVectorExtensions.Epsilon)
@@ -143,7 +144,7 @@ namespace Cinemachine
             float averageWeight;
             Vector3 center = inverseView.MultiplyPoint3x4(CalculateAveragePosition(out averageWeight));
             bool gotOne = false;
-            Bounds b = new Bounds(center, new Vector3(m_lastRadius*2, m_lastRadius*2, m_lastRadius*2));
+            Bounds b = new Bounds(center, new Vector3(m_lastRadius * 2, m_lastRadius * 2, m_lastRadius * 2));
             if (averageWeight > UnityVectorExtensions.Epsilon)
             {
                 for (int i = 0; i < m_Targets.Length; ++i)

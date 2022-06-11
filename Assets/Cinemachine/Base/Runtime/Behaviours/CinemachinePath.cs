@@ -14,7 +14,8 @@ namespace Cinemachine
     {
         /// <summary>A waypoint along the path</summary>
         [DocumentationSorting(18.2f, DocumentationSortingAttribute.Level.UserRef)]
-        [Serializable] public struct Waypoint
+        [Serializable]
+        public struct Waypoint
         {
             /// <summary>Position in path-local space</summary>
             [Tooltip("Position in path-local space")]

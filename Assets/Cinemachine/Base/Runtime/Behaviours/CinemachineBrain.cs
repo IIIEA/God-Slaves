@@ -21,7 +21,7 @@ namespace Cinemachine
     /// Note that a camera cut is just a zero-time blend.
     /// </summary>
     [DocumentationSorting(0, DocumentationSortingAttribute.Level.UserRef)]
-//    [RequireComponent(typeof(Camera))] // strange but true: we can live without it
+    //    [RequireComponent(typeof(Camera))] // strange but true: we can live without it
     [ExecuteInEditMode, DisallowMultipleComponent]
     [AddComponentMenu("Cinemachine/CinemachineBrain")]
     [SaveDuringPlay]
@@ -102,10 +102,10 @@ namespace Cinemachine
         private Camera m_OutputCamera = null; // never use directly - use accessor
 
         /// <summary>Event with a CinemachineBrain parameter</summary>
-        [Serializable] public class BrainEvent : UnityEvent<CinemachineBrain> {}
+        [Serializable] public class BrainEvent : UnityEvent<CinemachineBrain> { }
 
         /// <summary>Event with a ICinemachineCamera parameter</summary>
-        [Serializable] public class VcamEvent : UnityEvent<ICinemachineCamera> {}
+        [Serializable] public class VcamEvent : UnityEvent<ICinemachineCamera> { }
 
         /// <summary>This event will fire whenever a virtual camera goes live and there is no blend</summary>
         [Tooltip("This event will fire whenever a virtual camera goes live and there is no blend")]
@@ -140,7 +140,7 @@ namespace Cinemachine
 
         /// <summary>Get the default world up for the virtual cameras.</summary>
         public Vector3 DefaultWorldUp
-            { get { return (m_WorldUpOverride != null) ? m_WorldUpOverride.transform.up : Vector3.up; } }
+        { get { return (m_WorldUpOverride != null) ? m_WorldUpOverride.transform.up : Vector3.up; } }
 
         private ICinemachineCamera mActiveCameraPreviousFrame;
         private ICinemachineCamera mOutgoingCameraPreviousFrame;
@@ -155,12 +155,12 @@ namespace Cinemachine
             public float deltaTime;
             public float timeOfOverride;
             public bool Active { get { return camera != null; } }
-            public bool Expired 
-            { 
-                get 
-                { 
-                    return !Application.isPlaying 
-                        && Time.realtimeSinceStartup - timeOfOverride > Time.maximumDeltaTime; 
+            public bool Expired
+            {
+                get
+                {
+                    return !Application.isPlaying
+                        && Time.realtimeSinceStartup - timeOfOverride > Time.maximumDeltaTime;
                 }
             }
         }
@@ -642,7 +642,7 @@ namespace Cinemachine
                 if (SoloCamera != null)
                     return SoloCamera;
                 OverrideStackFrame ovr = GetActiveOverride();
-                return (ovr != null && ovr.camera != null) 
+                return (ovr != null && ovr.camera != null)
                     ? ovr.camera : TopCameraFromPriorityQueue();
             }
         }
@@ -689,7 +689,7 @@ namespace Cinemachine
                         fromCameraName, toCameraName, blendCurve);
             }
             var keys = blendCurve.keys;
-            duration = (keys == null || keys.Length == 0) ? 0 : keys[keys.Length-1].time;
+            duration = (keys == null || keys.Length == 0) ? 0 : keys[keys.Length - 1].time;
             return blendCurve;
         }
 
@@ -698,7 +698,7 @@ namespace Cinemachine
         /// or to/from a point, if we can't do anything else
         /// </summary>
         private CinemachineBlend CreateBlend(
-            ICinemachineCamera camA, ICinemachineCamera camB, 
+            ICinemachineCamera camA, ICinemachineCamera camB,
             AnimationCurve blendCurve, float duration,
             CinemachineBlend activeBlend)
         {
@@ -782,7 +782,7 @@ namespace Cinemachine
         public void SetState(CameraState state) { State = state; }
 
         public string Name { get; private set; }
-        public string Description { get { return ""; }}
+        public string Description { get { return ""; } }
         public int Priority { get; set; }
         public Transform LookAt { get; set; }
         public Transform Follow { get; set; }
@@ -791,8 +791,8 @@ namespace Cinemachine
         public ICinemachineCamera LiveChildOrSelf { get { return this; } }
         public ICinemachineCamera ParentCamera { get { return null; } }
         public bool IsLiveChild(ICinemachineCamera vcam) { return false; }
-        public void UpdateCameraState(Vector3 worldUp, float deltaTime) {}
-        public void OnTransitionFromCamera(ICinemachineCamera fromCam, Vector3 worldUp, float deltaTime) {}
+        public void UpdateCameraState(Vector3 worldUp, float deltaTime) { }
+        public void OnTransitionFromCamera(ICinemachineCamera fromCam, Vector3 worldUp, float deltaTime) { }
     }
 
     /// <summary>
@@ -810,8 +810,8 @@ namespace Cinemachine
 
         public CinemachineBlend Blend { get; private set; }
 
-        public string Name { get { return "Blend"; }}
-        public string Description { get { return Blend.Description; }}
+        public string Name { get { return "Blend"; } }
+        public string Description { get { return Blend.Description; } }
         public int Priority { get; set; }
         public Transform LookAt { get; set; }
         public Transform Follow { get; set; }
@@ -826,6 +826,6 @@ namespace Cinemachine
             Blend.UpdateCameraState(worldUp, deltaTime);
             State = Blend.State;
         }
-        public void OnTransitionFromCamera(ICinemachineCamera fromCam, Vector3 worldUp, float deltaTime) {}
+        public void OnTransitionFromCamera(ICinemachineCamera fromCam, Vector3 worldUp, float deltaTime) { }
     }
 }

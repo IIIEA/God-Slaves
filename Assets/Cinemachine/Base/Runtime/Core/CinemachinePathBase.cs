@@ -16,7 +16,8 @@ namespace Cinemachine
         /// <summary>This class holds the settings that control how the path
         /// will appear in the editor scene view.  The path is not visible in the game view</summary>
         [DocumentationSorting(18.1f, DocumentationSortingAttribute.Level.UserRef)]
-        [Serializable] public class Appearance
+        [Serializable]
+        public class Appearance
         {
             [Tooltip("The color of the path itself when it is active in the editor")]
             public Color pathColor = Color.green;
@@ -143,16 +144,16 @@ namespace Cinemachine
         /// <param name="units">The uniot type</param>
         /// <returns>The minimum allowable value for this path</returns>
         public float MinUnit(PositionUnits units)
-        { 
-            return units == PositionUnits.Distance ? 0 : MinPos; 
+        {
+            return units == PositionUnits.Distance ? 0 : MinPos;
         }
 
         /// <summary>Get the maximum value, for the given unity type</summary>
         /// <param name="units">The uniot type</param>
         /// <returns>The maximum allowable value for this path</returns>
         public float MaxUnit(PositionUnits units)
-        { 
-            return units == PositionUnits.Distance ? PathLength : MaxPos; 
+        {
+            return units == PositionUnits.Distance ? PathLength : MaxPos;
         }
 
         /// <summary>Normalize the unit, so that it lies between MinUmit and MaxUnit</summary>
@@ -206,12 +207,12 @@ namespace Cinemachine
 
         /// <summary>Call this if the path changes in such a way as to affect distances
         /// or other cached path elements</summary>
-        public virtual void InvalidateDistanceCache() 
-        { 
-            m_DistanceToPos = null; 
-            m_PosToDistance = null; 
+        public virtual void InvalidateDistanceCache()
+        {
+            m_DistanceToPos = null;
+            m_PosToDistance = null;
             m_CachedSampleSteps = 0;
-            m_PathLength = 0; 
+            m_PathLength = 0;
         }
 
         /// <summary>See whether the distance cache is valid.  If it's not valid,
@@ -223,7 +224,7 @@ namespace Cinemachine
         {
             return (MaxPos == MinPos)
                 || (m_DistanceToPos != null && m_PosToDistance != null
-                    && m_CachedSampleSteps == DistanceCacheSampleStepsPerSegment 
+                    && m_CachedSampleSteps == DistanceCacheSampleStepsPerSegment
                     && m_CachedSampleSteps > 0);
         }
 
@@ -232,8 +233,8 @@ namespace Cinemachine
         /// trigger a potentially costly regeneration of the path distance cache</summary>
         /// <returns>The length of the path in distance units, when sampled at this rate</returns>
         public float PathLength
-        { 
-            get 
+        {
+            get
             {
                 if (DistanceCacheSampleStepsPerSegment < 1)
                     return 0;
@@ -273,10 +274,10 @@ namespace Cinemachine
             distance = NormalizePathDistance(distance);
             float d = distance / m_cachedDistanceStepSize;
             int i = Mathf.FloorToInt(d);
-            if (i >= m_DistanceToPos.Length-1)
+            if (i >= m_DistanceToPos.Length - 1)
                 return MaxPos;
             float t = d - (float)i;
-            return MinPos + Mathf.Lerp(m_DistanceToPos[i], m_DistanceToPos[i+1], t);
+            return MinPos + Mathf.Lerp(m_DistanceToPos[i], m_DistanceToPos[i + 1], t);
         }
 
         /// <summary>Get the path position (in path units) corresponding to this distance along the path.  
@@ -290,10 +291,10 @@ namespace Cinemachine
             pos = NormalizePos(pos);
             float d = pos / m_cachedPosStepSize;
             int i = Mathf.FloorToInt(d);
-            if (i >= m_PosToDistance.Length-1)
+            if (i >= m_PosToDistance.Length - 1)
                 return m_PathLength;
             float t = d - (float)i;
-            return Mathf.Lerp(m_PosToDistance[i], m_PosToDistance[i+1], t);
+            return Mathf.Lerp(m_PosToDistance[i], m_PosToDistance[i + 1], t);
         }
 
         private float[] m_DistanceToPos;
@@ -343,9 +344,9 @@ namespace Cinemachine
                 {
                     distance += stepSize;
                     float d = m_PosToDistance[posIndex];
-                    while (d < distance && posIndex < numKeys-1)
-                         d = m_PosToDistance[++posIndex];
-                    float d0 =  m_PosToDistance[posIndex-1];
+                    while (d < distance && posIndex < numKeys - 1)
+                        d = m_PosToDistance[++posIndex];
+                    float d0 = m_PosToDistance[posIndex - 1];
                     float delta = d - d0;
                     float t = (distance - d0) / delta;
                     m_DistanceToPos[i] = m_cachedPosStepSize * (t + posIndex - 1);

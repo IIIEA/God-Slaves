@@ -172,7 +172,7 @@ namespace Cinemachine
                 m_PathPosition = m_Path.FindClosestPoint(
                     FollowTarget.transform.position,
                     Mathf.FloorToInt(prevPos),
-                    (deltaTime < 0 || m_AutoDolly.m_SearchRadius <= 0) 
+                    (deltaTime < 0 || m_AutoDolly.m_SearchRadius <= 0)
                         ? -1 : m_AutoDolly.m_SearchRadius,
                     m_AutoDolly.m_SearchResolution);
                 if (m_PositionUnits == CinemachinePathBase.PositionUnits.Distance)
@@ -233,15 +233,15 @@ namespace Cinemachine
             curState.RawPosition = m_PreviousCameraPosition = newCameraPos;
 
             // Set the orientation and up
-            Quaternion newOrientation 
+            Quaternion newOrientation
                 = GetTargetOrientationAtPathPoint(newPathOrientation, curState.ReferenceUp);
             if (deltaTime < 0)
                 m_PreviousOrientation = newOrientation;
-            else 
+            else
             {
                 if (deltaTime >= 0)
                 {
-                    Vector3 relative = (Quaternion.Inverse(m_PreviousOrientation) 
+                    Vector3 relative = (Quaternion.Inverse(m_PreviousOrientation)
                         * newOrientation).eulerAngles;
                     for (int i = 0; i < 3; ++i)
                         if (relative[i] > 180)
@@ -266,7 +266,7 @@ namespace Cinemachine
             Vector3 localOffset = Quaternion.Inverse(targetOrientation) * delta;
             m_PathOffset += localOffset;
         }
-        
+
         private Quaternion GetTargetOrientationAtPathPoint(Quaternion pathOrientation, Vector3 up)
         {
             switch (m_CameraUp)
@@ -274,7 +274,7 @@ namespace Cinemachine
                 default:
                 case CameraUpMode.Default: break;
                 case CameraUpMode.Path: return pathOrientation;
-                case CameraUpMode.PathNoRoll: 
+                case CameraUpMode.PathNoRoll:
                     return Quaternion.LookRotation(pathOrientation * Vector3.forward, up);
                 case CameraUpMode.FollowTarget:
                     if (FollowTarget != null)
@@ -290,21 +290,21 @@ namespace Cinemachine
 
         private Vector3 AngularDamping
         {
-            get 
-            { 
+            get
+            {
                 switch (m_CameraUp)
                 {
                     case CameraUpMode.PathNoRoll:
                     case CameraUpMode.FollowTargetNoRoll:
-                        return new Vector3(m_PitchDamping, m_YawDamping, 0); 
+                        return new Vector3(m_PitchDamping, m_YawDamping, 0);
                     case CameraUpMode.Default:
                         return Vector3.zero;
                     default:
-                        return new Vector3(m_PitchDamping, m_YawDamping, m_RollDamping); 
+                        return new Vector3(m_PitchDamping, m_YawDamping, m_RollDamping);
                 }
-            } 
+            }
         }
-        
+
         private float m_PreviousPathPosition = 0;
         Quaternion m_PreviousOrientation = Quaternion.identity;
         private Vector3 m_PreviousCameraPosition = Vector3.zero;

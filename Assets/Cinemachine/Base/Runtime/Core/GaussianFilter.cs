@@ -22,11 +22,11 @@ namespace Cinemachine.Utility
             if (kernelRadius == 0)
                 mKernelSum = mKernel[0] = 1;
             else for (int i = -kernelRadius; i <= kernelRadius; ++i)
-            {
-                mKernel[i + kernelRadius]
-                    = (float)(Math.Exp(-(i * i) / (2 * sigma * sigma)) / Math.Sqrt(2.0 * Math.PI * sigma));
-                mKernelSum += mKernel[i + kernelRadius];
-            }
+                {
+                    mKernel[i + kernelRadius]
+                        = (float)(Math.Exp(-(i * i) / (2 * sigma * sigma)) / Math.Sqrt(2.0 * Math.PI * sigma));
+                    mKernelSum += mKernel[i + kernelRadius];
+                }
             Sigma = sigma;
         }
 
@@ -49,7 +49,7 @@ namespace Cinemachine.Utility
                 mData = new T[KernelSize];
                 for (int i = 0; i < KernelSize; ++i)
                     mData[i] = v;
-                mCurrentPos = Mathf.Min(1, KernelSize-1);
+                mCurrentPos = Mathf.Min(1, KernelSize - 1);
             }
             mData[mCurrentPos] = v;
             if (++mCurrentPos == KernelSize)
@@ -61,7 +61,7 @@ namespace Cinemachine.Utility
             if (KernelSize < 3)
                 return v;
             AddValue(v);
-            return Value();    
+            return Value();
         }
 
         /// Returned value will be kernelRadius old
@@ -71,7 +71,7 @@ namespace Cinemachine.Utility
     internal class GaussianWindow1D_Vector3 : GaussianWindow1d<Vector3>
     {
         public GaussianWindow1D_Vector3(float sigma, int maxKernelRadius = 10)
-            : base(sigma, maxKernelRadius) {}
+            : base(sigma, maxKernelRadius) { }
 
         protected override Vector3 Compute(int windowPos)
         {
@@ -89,7 +89,7 @@ namespace Cinemachine.Utility
     internal class GaussianWindow1D_Quaternion : GaussianWindow1d<Quaternion>
     {
         public GaussianWindow1D_Quaternion(float sigma, int maxKernelRadius = 10)
-            : base(sigma, maxKernelRadius) {}
+            : base(sigma, maxKernelRadius) { }
         protected override Quaternion Compute(int windowPos)
         {
             Quaternion sum = new Quaternion(0, 0, 0, 0);
@@ -117,7 +117,7 @@ namespace Cinemachine.Utility
     internal class GaussianWindow1D_CameraRotation : GaussianWindow1d<Vector2>
     {
         public GaussianWindow1D_CameraRotation(float sigma, int maxKernelRadius = 10)
-            : base(sigma, maxKernelRadius) {}
+            : base(sigma, maxKernelRadius) { }
 
         protected override Vector2 Compute(int windowPos)
         {

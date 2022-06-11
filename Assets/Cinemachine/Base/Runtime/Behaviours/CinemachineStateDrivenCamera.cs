@@ -50,7 +50,9 @@ namespace Cinemachine
         public bool m_EnableAllChildCameras;
 
         /// <summary>Internal API for the editor.  Do not use this field</summary>
-        [SerializeField][HideInInspector][NoSaveDuringPlay]
+        [SerializeField]
+        [HideInInspector]
+        [NoSaveDuringPlay]
         public CinemachineVirtualCameraBase[] m_ChildCameras = null;
 
         /// <summary>This represents a single instrunction to the StateDrivenCamera.  It associates
@@ -106,21 +108,21 @@ namespace Cinemachine
             public ParentHash(int h, int p) { m_Hash = h; m_ParentHash = p; }
         }
         /// <summary>Internal API for the Inspector editor</summary>
-        [HideInInspector][SerializeField] public ParentHash[] m_ParentHash = null;
+        [HideInInspector] [SerializeField] public ParentHash[] m_ParentHash = null;
 
         /// <summary>Gets a brief debug description of this virtual camera, for use when displayiong debug info</summary>
-        public override string Description 
-        { 
-            get 
-            { 
+        public override string Description
+        {
+            get
+            {
                 // Show the active camera and blend
                 ICinemachineCamera vcam = LiveChild;
-                if (mActiveBlend == null) 
+                if (mActiveBlend == null)
                     return (vcam != null) ? "[" + vcam.Name + "]" : "(none)";
                 return mActiveBlend.Description;
             }
         }
-        
+
         /// <summary>Get the current "best" child virtual camera, that would be chosen
         /// if the State Driven Camera were active.</summary>
         public ICinemachineCamera LiveChild { set; get; }
@@ -131,9 +133,9 @@ namespace Cinemachine
         /// <summary>Check whether the vcam a live child of this camera.</summary>
         /// <param name="vcam">The Virtual Camera to check</param>
         /// <returns>True if the vcam is currently actively influencing the state of this vcam</returns>
-        public override bool IsLiveChild(ICinemachineCamera vcam) 
-        { 
-            return vcam == LiveChild 
+        public override bool IsLiveChild(ICinemachineCamera vcam)
+        {
+            return vcam == LiveChild
                 || (mActiveBlend != null && (vcam == mActiveBlend.CamA || vcam == mActiveBlend.CamB));
         }
 
@@ -184,7 +186,7 @@ namespace Cinemachine
             {
                 for (int i = 0; i < m_ChildCameras.Length; ++i)
                 {
-                    CinemachineVirtualCameraBase vcam  = m_ChildCameras[i];
+                    CinemachineVirtualCameraBase vcam = m_ChildCameras[i];
                     if (vcam != null)
                     {
                         bool enableChild = m_EnableAllChildCameras || vcam == best;
@@ -237,7 +239,7 @@ namespace Cinemachine
                 m_State = mActiveBlend.State;
             }
             else if (LiveChild != null)
-                m_State =  LiveChild.State;
+                m_State = LiveChild.State;
 
             PreviousStateIsValid = true;
             //UnityEngine.Profiling.Profiler.EndSample();
@@ -275,7 +277,7 @@ namespace Cinemachine
         CameraState m_State = CameraState.Default;
 
         /// <summary>The list of child cameras.  These are just the immediate children in the hierarchy.</summary>
-        public CinemachineVirtualCameraBase[] ChildCameras { get { UpdateListOfChildren(); return m_ChildCameras; }}
+        public CinemachineVirtualCameraBase[] ChildCameras { get { UpdateListOfChildren(); return m_ChildCameras; } }
 
         /// <summary>Is there a blend in progress?</summary>
         public bool IsBlending { get { return mActiveBlend != null; } }
@@ -284,7 +286,7 @@ namespace Cinemachine
         /// for state parents, so we have to invent them in order to implement nested state
         /// handling</summary>
         public static string CreateFakeHashName(int parentHash, string stateName)
-            { return parentHash.ToString() + "_" + stateName; }
+        { return parentHash.ToString() + "_" + stateName; }
 
         float mActivationTime = 0;
         Instruction mActiveInstruction;
@@ -336,7 +338,7 @@ namespace Cinemachine
             mActiveBlend = null;
         }
 
-        List<AnimatorClipInfo>  m_clipInfoList = new List<AnimatorClipInfo>();
+        List<AnimatorClipInfo> m_clipInfoList = new List<AnimatorClipInfo>();
         private CinemachineVirtualCameraBase ChooseCurrentCamera(float deltaTime)
         {
             //UnityEngine.Profiling.Profiler.BeginSample("CinemachineStateDrivenCamera.ChooseCurrentCamera");
@@ -347,7 +349,7 @@ namespace Cinemachine
                 return null;
             }
             CinemachineVirtualCameraBase defaultCam = m_ChildCameras[0];
-            if (m_AnimatedTarget == null || !m_AnimatedTarget.gameObject.activeSelf 
+            if (m_AnimatedTarget == null || !m_AnimatedTarget.gameObject.activeSelf
                 || m_AnimatedTarget.runtimeAnimatorController == null
                 || m_LayerIndex < 0 || m_LayerIndex >= m_AnimatedTarget.layerCount)
             {
@@ -369,7 +371,7 @@ namespace Cinemachine
                     hash = GetClipHash(info.fullPathHash, m_clipInfoList);
                 }
             }
-            else 
+            else
             {
                 AnimatorStateInfo info = m_AnimatedTarget.GetCurrentAnimatorStateInfo(m_LayerIndex);
                 hash = info.fullPathHash;
@@ -474,7 +476,7 @@ namespace Cinemachine
             }
             return hash;
         }
-            
+
         private AnimationCurve LookupBlendCurve(
             ICinemachineCamera fromKey, ICinemachineCamera toKey, out float duration)
         {
@@ -488,12 +490,12 @@ namespace Cinemachine
                         fromCameraName, toCameraName, blendCurve);
             }
             var keys = blendCurve.keys;
-            duration = (keys == null || keys.Length == 0) ? 0 : keys[keys.Length-1].time;
+            duration = (keys == null || keys.Length == 0) ? 0 : keys[keys.Length - 1].time;
             return blendCurve;
         }
 
         private CinemachineBlend CreateBlend(
-            ICinemachineCamera camA, ICinemachineCamera camB, 
+            ICinemachineCamera camA, ICinemachineCamera camB,
             AnimationCurve blendCurve, float duration,
             CinemachineBlend activeBlend, float deltaTime)
         {
@@ -506,7 +508,7 @@ namespace Cinemachine
                 CameraState state = (activeBlend != null) ? activeBlend.State : State;
                 camA = new StaticPointVirtualCamera(state, (activeBlend != null) ? "Mid-blend" : "(none)");
             }
-            return new CinemachineBlend(camA, camB, blendCurve,duration,  0);
+            return new CinemachineBlend(camA, camB, blendCurve, duration, 0);
         }
     }
 }

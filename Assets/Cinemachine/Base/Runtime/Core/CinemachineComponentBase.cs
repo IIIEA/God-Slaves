@@ -12,8 +12,8 @@ namespace Cinemachine
         protected const float Epsilon = Utility.UnityVectorExtensions.Epsilon;
 
         /// <summary>Get the associated CinemachineVirtualCameraBase</summary>
-        public CinemachineVirtualCameraBase VirtualCamera 
-        { 
+        public CinemachineVirtualCameraBase VirtualCamera
+        {
             get
             {
                 if (m_vcamOwner == null)
@@ -24,9 +24,9 @@ namespace Cinemachine
         CinemachineVirtualCameraBase m_vcamOwner;
 
         /// <summary>Returns the owner vcam's Follow target.</summary>
-        public Transform FollowTarget 
+        public Transform FollowTarget
         {
-            get 
+            get
             {
                 CinemachineVirtualCameraBase vcam = VirtualCamera;
                 return vcam == null ? null : vcam.Follow;
@@ -34,9 +34,9 @@ namespace Cinemachine
         }
 
         /// <summary>Returns the owner vcam's LookAt target.</summary>
-        public Transform LookAtTarget 
+        public Transform LookAtTarget
         {
-            get 
+            get
             {
                 CinemachineVirtualCameraBase vcam = VirtualCamera;
                 return vcam == null ? null : vcam.LookAt;
@@ -59,7 +59,7 @@ namespace Cinemachine
         /// <summary>Override this to do such things as offset the RefereceLookAt.
         /// Base class implementation does nothing.</summary>
         /// <param name="curState">Input state that must be mutated</param>
-        public virtual void PrePipelineMutateCameraState(ref CameraState state) {}
+        public virtual void PrePipelineMutateCameraState(ref CameraState state) { }
 
         /// <summary>What part of the pipeline this fits into</summary>
         public abstract CinemachineCore.Stage Stage { get; }
@@ -72,6 +72,6 @@ namespace Cinemachine
         /// <summary>API for the editor, to process a position drag from the user.
         /// Base class implementation does nothing.</summary>
         /// <param name="delta">The amount dragged this frame</param>
-        public virtual void OnPositionDragged(Vector3 delta) {}
+        public virtual void OnPositionDragged(Vector3 delta) { }
     }
 }

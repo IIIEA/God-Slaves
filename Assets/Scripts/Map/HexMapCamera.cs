@@ -1,95 +1,141 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HexMapCamera : MonoBehaviour
 {
-	[SerializeField] private HexGrid _grid;
-	[SerializeField] private float _stickMinZoom, _stickMaxZoom;
-	[SerializeField] private float _swivelMinZoom, _swivelMaxZoom;
-	[SerializeField] private float _moveSpeedMinZoom, _moveSpeedMaxZoom;
-	[SerializeField] private float _rotationSpeed;
 
-	private float _rotationAngle;
-	private Transform _swivel, _stick;
-	private float _zoom = 1f;
+    public float stickMinZoom, stickMaxZoom;
 
-	void Awake()
-	{
-		_swivel = transform.GetChild(0);
-		_stick = _swivel.GetChild(0);
-	}
+    public float swivelMinZoom, swivelMaxZoom;
 
-	private void Update()
-	{
-		float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
+    public float moveSpeedMinZoom, moveSpeedMaxZoom;
 
-		if (zoomDelta != 0f)
-		{
-			AdjustZoom(zoomDelta);
-		}
+    public float rotationSpeed;
 
-		float rotationDelta = Input.GetAxis("Rotation");
+    Transform swivel, stick;
 
-		if (rotationDelta != 0f)
-		{
-			AdjustRotation(rotationDelta);
-		}
+    public HexGrid grid;
 
-		float xDelta = Input.GetAxis("Horizontal");
-		float zDelta = Input.GetAxis("Vertical");
+    float zoom = 1f;
 
-		if (xDelta != 0f || zDelta != 0f)
-		{
-			AdjustPosition(xDelta, zDelta);
-		}
-	}
+    float rotationAngle;
 
-	private void AdjustZoom(float delta)
-	{
-		_zoom = Mathf.Clamp01(_zoom + delta);
+    static HexMapCamera instance;
 
+    public static bool Locked
+    {
+        set
+        {
+            instance.enabled = !value;
+        }
+    }
 
-		float distance = Mathf.Lerp(_stickMinZoom, _stickMaxZoom, _zoom);
-		_stick.localPosition = new Vector3(0f, 0f, distance);
+    public static void ValidatePosition()
+    {
+        instance.AdjustPosition(0f, 0f);
+    }
 
-		float angle = Mathf.Lerp(_swivelMinZoom, _swivelMaxZoom, _zoom);
-		_swivel.localRotation = Quaternion.Euler(angle, 0f, 0f);
-	}
+    void Awake()
+    {
+        swivel = transform.GetChild(0);
+        stick = swivel.GetChild(0);
+    }
 
-	private void AdjustPosition(float xDelta, float zDelta)
-	{
-		Vector3 direction = transform.localRotation * new Vector3(xDelta, 0f, zDelta).normalized;
-		float damping = Mathf.Max(Mathf.Abs(xDelta), Mathf.Abs(zDelta));
-		float distance = Mathf.Lerp(_moveSpeedMinZoom, _moveSpeedMaxZoom, _zoom) * damping * Time.deltaTime;
+    void OnEnable()
+    {
+        instance = this;
+        ValidatePosition();
+    }
 
-		Vector3 position = transform.localPosition;
-		position += direction * distance;
-		transform.localPosition = ClampPosition(position);
-	}
+    void Update()
+    {
+        float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
+        if (zoomDelta != 0f)
+        {
+            AdjustZoom(zoomDelta);
+        }
 
-	private Vector3 ClampPosition(Vector3 position)
-	{
-		float xMax = (_grid.ChunkCountX * HexMetrics.ChunkSizeX - 0.5f) * (2f * HexMetrics.InnerRadius);
-		position.x = Mathf.Clamp(position.x, 0f, xMax);
+        float rotationDelta = Input.GetAxis("Rotation");
+        if (rotationDelta != 0f)
+        {
+            AdjustRotation(rotationDelta);
+        }
 
-		float zMax = (_grid.ChunkCountZ * HexMetrics.ChunkSizeZ - 1) * (1.5f * HexMetrics.OuterRadius);
-		position.z = Mathf.Clamp(position.z, 0f, zMax);
+        float xDelta = Input.GetAxis("Horizontal");
+        float zDelta = Input.GetAxis("Vertical");
+        if (xDelta != 0f || zDelta != 0f)
+        {
+            AdjustPosition(xDelta, zDelta);
+        }
+    }
 
-		return position;
-	}
+    void AdjustZoom(float delta)
+    {
+        zoom = Mathf.Clamp01(zoom + delta);
 
-	private void AdjustRotation(float delta)
-	{
-		_rotationAngle += delta * _rotationSpeed * Time.deltaTime;
+        float distance = Mathf.Lerp(stickMinZoom, stickMaxZoom, zoom);
+        stick.localPosition = new Vector3(0f, 0f, distance);
 
-		if (_rotationAngle < 0f)
-		{
-			_rotationAngle += 360f;
-		}
-		else if (_rotationAngle >= 360f)
-		{
-			_rotationAngle -= 360f;
-		}
+        float angle = Mathf.Lerp(swivelMinZoom, swivelMaxZoom, zoom);
+        swivel.localRotation = Quaternion.Euler(angle, 0f, 0f);
+    }
 
-		transform.localRotation = Quaternion.Euler(0f, _rotationAngle, 0f);
-	}
+    void AdjustRotation(float delta)
+    {
+        rotationAngle += delta * rotationSpeed * Time.deltaTime;
+        if (rotationAngle < 0f)
+        {
+            rotationAngle += 360f;
+        }
+        else if (rotationAngle >= 360f)
+        {
+            rotationAngle -= 360f;
+        }
+        transform.localRotation = Quaternion.Euler(0f, rotationAngle, 0f);
+    }
+
+    void AdjustPosition(float xDelta, float zDelta)
+    {
+        Vector3 direction =
+            transform.localRotation *
+            new Vector3(xDelta, 0f, zDelta).normalized;
+        float damping = Mathf.Max(Mathf.Abs(xDelta), Mathf.Abs(zDelta));
+        float distance =
+            Mathf.Lerp(moveSpeedMinZoom, moveSpeedMaxZoom, zoom) *
+            damping * Time.deltaTime;
+
+        Vector3 position = transform.localPosition;
+        position += direction * distance;
+        transform.localPosition =
+            grid.wrapping ? WrapPosition(position) : ClampPosition(position);
+    }
+
+    Vector3 ClampPosition(Vector3 position)
+    {
+        float xMax = (grid.cellCountX - 0.5f) * HexMetrics.innerDiameter;
+        position.x = Mathf.Clamp(position.x, 0f, xMax);
+
+        float zMax = (grid.cellCountZ - 1) * (1.5f * HexMetrics.outerRadius);
+        position.z = Mathf.Clamp(position.z, 0f, zMax);
+
+        return position;
+    }
+
+    Vector3 WrapPosition(Vector3 position)
+    {
+        float width = grid.cellCountX * HexMetrics.innerDiameter;
+        while (position.x < 0f)
+        {
+            position.x += width;
+        }
+        while (position.x > width)
+        {
+            position.x -= width;
+        }
+
+        float zMax = (grid.cellCountZ - 1) * (1.5f * HexMetrics.outerRadius);
+        position.z = Mathf.Clamp(position.z, 0f, zMax);
+
+        grid.CenterMap(position.x);
+        return position;
+    }
 }

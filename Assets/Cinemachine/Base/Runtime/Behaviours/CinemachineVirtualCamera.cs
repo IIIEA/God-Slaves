@@ -221,7 +221,7 @@ namespace Cinemachine
             foreach (Transform child in transform)
                 if (child.GetComponent<CinemachinePipeline>() != null)
                     oldPipeline.Add(child);
-            
+
             foreach (Transform child in oldPipeline)
             {
                 if (DestroyPipelineOverride != null)
@@ -248,7 +248,7 @@ namespace Cinemachine
                 newPipeline = CreatePipelineOverride(this, PipelineName, components);
             else
             {
-                GameObject go =  new GameObject(PipelineName);
+                GameObject go = new GameObject(PipelineName);
                 go.transform.parent = transform;
                 go.AddComponent<CinemachinePipeline>();
                 newPipeline = go.transform;
@@ -357,7 +357,7 @@ namespace Cinemachine
         CameraState m_State = CameraState.Default; // Current state this frame
 
         CinemachineComponentBase[] m_ComponentPipeline = null;
-        [SerializeField][HideInInspector] private Transform m_ComponentOwner = null;   // serialized to handle copy/paste
+        [SerializeField] [HideInInspector] private Transform m_ComponentOwner = null;   // serialized to handle copy/paste
         void UpdateComponentPipeline()
         {
             // Did we just get copy/pasted?

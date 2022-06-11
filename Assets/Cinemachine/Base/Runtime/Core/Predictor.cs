@@ -10,10 +10,10 @@ namespace Cinemachine.Utility
 
         const float kSmoothingDefault = 10;
         float mSmoothing = kSmoothingDefault;
-        public float Smoothing 
+        public float Smoothing
         {
             get { return mSmoothing; }
-            set 
+            set
             {
                 if (value != mSmoothing)
                 {
@@ -84,7 +84,7 @@ namespace Cinemachine.Utility
         // Exponential decay: decay a given quantity opver a period of time
         static float Decay(float initial, float decayConstant, float deltaTime)
         {
-            return initial /  Mathf.Exp(decayConstant * deltaTime);
+            return initial / Mathf.Exp(decayConstant * deltaTime);
         }
 
         /// <summary>Standard residual</summary>

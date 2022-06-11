@@ -90,8 +90,10 @@ namespace Cinemachine.Utility
         {
             Assembly[] assemblies = System.AppDomain.CurrentDomain.GetAssemblies();
             assemblies = assemblies.Where((Assembly assembly)
-                    => { return assemblyPredicate(assembly); }).OrderBy((Assembly ass)
-                    => { return ass.FullName; }).ToArray();
+                    =>
+            { return assemblyPredicate(assembly); }).OrderBy((Assembly ass)
+         =>
+            { return ass.FullName; }).ToArray();
 
             List<Type> foundTypes = new List<Type>(100);
             foreach (Assembly assembly in assemblies)
@@ -106,9 +108,9 @@ namespace Cinemachine.Utility
         public static bool TypeIsDefined(string fullname)
         {
             return (from assembly in AppDomain.CurrentDomain.GetAssemblies()
-                from type in assembly.GetTypes()
-                where type.FullName == fullname
-                select type).Count() > 0;
+                    from type in assembly.GetTypes()
+                    where type.FullName == fullname
+                    select type).Count() > 0;
         }
 #endif
 

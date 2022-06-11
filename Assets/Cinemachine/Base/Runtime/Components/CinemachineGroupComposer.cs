@@ -110,8 +110,8 @@ namespace Cinemachine
         }
 
         /// <summary>Get LookAt target as CinemachineTargetGroup, or null if target is not a group</summary>
-        public CinemachineTargetGroup TargetGroup 
-        { 
+        public CinemachineTargetGroup TargetGroup
+        {
             get
             {
                 Transform lookAt = LookAtTarget;
@@ -120,7 +120,7 @@ namespace Cinemachine
                 return null;
             }
         }
-        
+
         /// <summary>Applies the composer rules and orients the camera accordingly</summary>
         /// <param name="state">The current camera state</param>
         /// <param name="deltaTime">Used for calculating damping.  If less than
@@ -223,13 +223,13 @@ namespace Cinemachine
             switch (m_FramingMode)
             {
                 case FramingMode.Horizontal:
-                    return Mathf.Max(Epsilon, b.size.x )/ (framingSize * VcamState.Lens.Aspect);
+                    return Mathf.Max(Epsilon, b.size.x) / (framingSize * VcamState.Lens.Aspect);
                 case FramingMode.Vertical:
                     return Mathf.Max(Epsilon, b.size.y) / framingSize;
                 default:
                 case FramingMode.HorizontalAndVertical:
                     return Mathf.Max(
-                        Mathf.Max(Epsilon, b.size.x) / (framingSize * VcamState.Lens.Aspect), 
+                        Mathf.Max(Epsilon, b.size.x) / (framingSize * VcamState.Lens.Aspect),
                         Mathf.Max(Epsilon, b.size.y) / framingSize);
             }
         }

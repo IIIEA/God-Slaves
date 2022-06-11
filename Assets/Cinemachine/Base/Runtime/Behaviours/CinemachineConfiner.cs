@@ -17,10 +17,10 @@ namespace Cinemachine
     public class CinemachineConfiner : CinemachineExtension
     {
         /// <summary>The confiner can operate using a 2D bounding shape or a 3D bounding volume</summary>
-        public enum Mode 
-        { 
-            Confine2D, 
-            Confine3D 
+        public enum Mode
+        {
+            Confine2D,
+            Confine3D
         };
         /// <summary>The confiner can operate using a 2D bounding shape or a 3D bounding volume</summary>
         [Tooltip("The confiner can operate using a 2D bounding shape or a 3D bounding volume")]
@@ -29,7 +29,7 @@ namespace Cinemachine
         /// <summary>The volume within which the camera is to be contained.</summary>
         [Tooltip("The volume within which the camera is to be contained")]
         public Collider m_BoundingVolume;
-        
+
         /// <summary>The 2D shape within which the camera is to be contained.</summary>
         [Tooltip("The 2D shape within which the camera is to be contained")]
         public Collider2D m_BoundingShape2D;
@@ -51,7 +51,7 @@ namespace Cinemachine
         {
             return GetExtraState<VcamExtraState>(vcam).confinerDisplacement > 0;
         }
-        
+
         private void OnValidate()
         {
             m_Damping = Mathf.Max(0, m_Damping);
@@ -62,10 +62,10 @@ namespace Cinemachine
             public Vector3 m_previousDisplacement;
             public float confinerDisplacement;
         };
-        
+
         /// <summary>Check if the bounding volume is defined</summary>
-        public bool IsValid 
-        {  
+        public bool IsValid
+        {
             get
             {
                 return ((m_ConfineMode == Mode.Confine3D && m_BoundingVolume != null)
@@ -104,13 +104,13 @@ namespace Cinemachine
         }
 
         private List<List<Vector2>> m_pathCache;
-       
+
         /// <summary>Call this if the bounding shape's points change at runtime</summary>
         public void InvalidatePathCache() { m_pathCache = null; }
 
         bool ValidatePathCache()
         {
-            Type colliderType = m_BoundingShape2D == null ? null:  m_BoundingShape2D.GetType();
+            Type colliderType = m_BoundingShape2D == null ? null : m_BoundingShape2D.GetType();
             if (colliderType == typeof(PolygonCollider2D))
             {
                 PolygonCollider2D poly = m_BoundingShape2D as PolygonCollider2D;
@@ -172,7 +172,7 @@ namespace Cinemachine
                 int numPoints = m_pathCache[i].Count;
                 if (numPoints > 0)
                 {
-                    Vector2 v0 = m_BoundingShape2D.transform.TransformPoint(m_pathCache[i][numPoints-1]);
+                    Vector2 v0 = m_BoundingShape2D.transform.TransformPoint(m_pathCache[i][numPoints - 1]);
                     for (int j = 0; j < numPoints; ++j)
                     {
                         Vector2 v = m_BoundingShape2D.transform.TransformPoint(m_pathCache[i][j]);

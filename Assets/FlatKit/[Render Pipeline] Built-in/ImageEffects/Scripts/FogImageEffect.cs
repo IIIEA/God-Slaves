@@ -1,8 +1,10 @@
 using UnityEngine;
 
-namespace FlatKit {
+namespace FlatKit
+{
     [ExecuteInEditMode, ImageEffectAllowedInSceneView, RequireComponent(typeof(Camera))]
-    public class FogImageEffect : MonoBehaviour {
+    public class FogImageEffect : MonoBehaviour
+    {
         public bool useDistance = true;
         public Gradient distanceGradient;
         public float near = 0;
@@ -21,7 +23,7 @@ namespace FlatKit {
 
         [HideInInspector]
         public Material material;
-        
+
         private Camera _camera;
         private Texture2D _lutDepth;
         private Texture2D _lutHeight;
@@ -41,28 +43,34 @@ namespace FlatKit {
         private static readonly int HeightFogIntensity = Shader.PropertyToID("_HeightFogIntensity");
         private static readonly int DistanceHeightBlend = Shader.PropertyToID("_DistanceHeightBlend");
 
-        void Awake() {
+        void Awake()
+        {
             material = new Material(Shader.Find(ShaderName));
             _camera = GetComponent<Camera>();
             _camera.depthTextureMode = DepthTextureMode.Depth;
             Debug.Assert(_camera.depthTextureMode != DepthTextureMode.None);
         }
 
-        private void Start() {
+        private void Start()
+        {
             UpdateShader();
         }
 
-        void OnValidate() {
-            if (material == null) {
+        void OnValidate()
+        {
+            if (material == null)
+            {
                 material = new Material(Shader.Find(ShaderName));
             }
-            
+
             UpdateShader();
         }
 
         [ImageEffectOpaque]
-        void OnRenderImage(RenderTexture source, RenderTexture destination) {
-            if (material == null) {
+        void OnRenderImage(RenderTexture source, RenderTexture destination)
+        {
+            if (material == null)
+            {
                 material = new Material(Shader.Find(ShaderName));
                 UpdateShader();
             }
@@ -74,7 +82,8 @@ namespace FlatKit {
             Graphics.Blit(source, destination, material);
         }
 
-        private void UpdateShader() {
+        private void UpdateShader()
+        {
             UpdateDistanceLut();
             material.SetTexture(DistanceLut, _lutDepth);
             material.SetFloat(Near, near);
@@ -94,16 +103,19 @@ namespace FlatKit {
             material.SetFloat(DistanceHeightBlend, distanceHeightBlend);
         }
 
-        private void UpdateDistanceLut() {
+        private void UpdateDistanceLut()
+        {
             if (distanceGradient == null) return;
 
-            if (_lutDepth != null) {
+            if (_lutDepth != null)
+            {
                 DestroyImmediate(_lutDepth);
             }
 
             const int width = 256;
             const int height = 1;
-            _lutDepth = new Texture2D(width, height, TextureFormat.RGBA32, /*mipChain=*/false) {
+            _lutDepth = new Texture2D(width, height, TextureFormat.RGBA32, /*mipChain=*/false)
+            {
                 wrapMode = TextureWrapMode.Clamp,
                 hideFlags = HideFlags.HideAndDontSave,
                 filterMode = FilterMode.Bilinear
@@ -111,9 +123,11 @@ namespace FlatKit {
 
             //22b5f7ed-989d-49d1-90d9-c62d76c3081a
 
-            for (float x = 0; x < width; x++) {
+            for (float x = 0; x < width; x++)
+            {
                 Color color = distanceGradient.Evaluate(x / (width - 1));
-                for (float y = 0; y < height; y++) {
+                for (float y = 0; y < height; y++)
+                {
                     _lutDepth.SetPixel(Mathf.CeilToInt(x), Mathf.CeilToInt(y), color);
                 }
             }
@@ -121,24 +135,29 @@ namespace FlatKit {
             _lutDepth.Apply();
         }
 
-        private void UpdateHeightLut() {
+        private void UpdateHeightLut()
+        {
             if (heightGradient == null) return;
 
-            if (_lutHeight != null) {
+            if (_lutHeight != null)
+            {
                 DestroyImmediate(_lutHeight);
             }
 
             const int width = 256;
             const int height = 1;
-            _lutHeight = new Texture2D(width, height, TextureFormat.RGBA32, /*mipChain=*/false) {
+            _lutHeight = new Texture2D(width, height, TextureFormat.RGBA32, /*mipChain=*/false)
+            {
                 wrapMode = TextureWrapMode.Clamp,
                 hideFlags = HideFlags.HideAndDontSave,
                 filterMode = FilterMode.Bilinear
             };
 
-            for (float x = 0; x < width; x++) {
+            for (float x = 0; x < width; x++)
+            {
                 Color color = heightGradient.Evaluate(x / (width - 1));
-                for (float y = 0; y < height; y++) {
+                for (float y = 0; y < height; y++)
+                {
                     _lutHeight.SetPixel(Mathf.CeilToInt(x), Mathf.CeilToInt(y), color);
                 }
             }

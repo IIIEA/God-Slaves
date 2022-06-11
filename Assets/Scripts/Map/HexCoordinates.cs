@@ -1,65 +1,146 @@
-using UnityEngine;
+﻿using UnityEngine;
+using System.IO;
 
 [System.Serializable]
 public struct HexCoordinates
 {
-	[SerializeField] private int _x;
-	[SerializeField] private int _z;
 
-	public int X { get { return _x; } }
-	public int Z { get { return _z; } }
-	public int Y { get { return -X - Z; } }
+    [SerializeField]
+    private int x, z;
 
-	public HexCoordinates(int x, int z)
-	{
-		_x = x;
-		_z = z;
-	}
+    public int X
+    {
+        get
+        {
+            return x;
+        }
+    }
 
-	public static HexCoordinates FromOffsetCoordinates(int x, int z)
-	{
-		return new HexCoordinates(x - z / 2, z);
-	}
+    public int Z
+    {
+        get
+        {
+            return z;
+        }
+    }
 
-	public override string ToString()
-	{
-		return "(" + X.ToString() + ", " + Y.ToString() + ", " + Z.ToString() + ")";
-	}
+    public int Y
+    {
+        get
+        {
+            return -X - Z;
+        }
+    }
 
-	public string ToStringOnSeparateLines()
-	{
-		return X.ToString() + "\n" + Y.ToString() + "\n" + Z.ToString();
-	}
+    public HexCoordinates(int x, int z)
+    {
+        if (HexMetrics.Wrapping)
+        {
+            int oX = x + z / 2;
+            if (oX < 0)
+            {
+                x += HexMetrics.wrapSize;
+            }
+            else if (oX >= HexMetrics.wrapSize)
+            {
+                x -= HexMetrics.wrapSize;
+            }
+        }
+        this.x = x;
+        this.z = z;
+    }
 
-	public static HexCoordinates FromPosition(Vector3 position)
-	{
-		float x = position.x / (HexMetrics.InnerRadius * 2f);
-		float y = -x;
+    public int DistanceTo(HexCoordinates other)
+    {
+        int xy =
+            (x < other.x ? other.x - x : x - other.x) +
+            (Y < other.Y ? other.Y - Y : Y - other.Y);
 
-		float offset = position.z / (HexMetrics.OuterRadius * 3f);
-		x -= offset;
-		y -= offset;
+        if (HexMetrics.Wrapping)
+        {
+            other.x += HexMetrics.wrapSize;
+            int xyWrapped =
+                (x < other.x ? other.x - x : x - other.x) +
+                (Y < other.Y ? other.Y - Y : Y - other.Y);
+            if (xyWrapped < xy)
+            {
+                xy = xyWrapped;
+            }
+            else
+            {
+                other.x -= 2 * HexMetrics.wrapSize;
+                xyWrapped =
+                    (x < other.x ? other.x - x : x - other.x) +
+                    (Y < other.Y ? other.Y - Y : Y - other.Y);
+                if (xyWrapped < xy)
+                {
+                    xy = xyWrapped;
+                }
+            }
+        }
 
-		int iX = Mathf.RoundToInt(x);
-		int iY = Mathf.RoundToInt(y);
-		int iZ = Mathf.RoundToInt(-x - y);
+        return (xy + (z < other.z ? other.z - z : z - other.z)) / 2;
+    }
 
-		if (iX + iY + iZ != 0)
-		{
-			float dX = Mathf.Abs(x - iX);
-			float dY = Mathf.Abs(y - iY);
-			float dZ = Mathf.Abs(-x - y - iZ);
+    public static HexCoordinates FromOffsetCoordinates(int x, int z)
+    {
+        return new HexCoordinates(x - z / 2, z);
+    }
 
-			if (dX > dY && dX > dZ)
-			{
-				iX = -iY - iZ;
-			}
-			else if (dZ > dY)
-			{
-				iZ = -iX - iY;
-			}
-		}
+    public static HexCoordinates FromPosition(Vector3 position)
+    {
+        float x = position.x / HexMetrics.innerDiameter;
+        float y = -x;
 
-		return new HexCoordinates(iX, iZ);
-	}
+        float offset = position.z / (HexMetrics.outerRadius * 3f);
+        x -= offset;
+        y -= offset;
+
+        int iX = Mathf.RoundToInt(x);
+        int iY = Mathf.RoundToInt(y);
+        int iZ = Mathf.RoundToInt(-x - y);
+
+        if (iX + iY + iZ != 0)
+        {
+            float dX = Mathf.Abs(x - iX);
+            float dY = Mathf.Abs(y - iY);
+            float dZ = Mathf.Abs(-x - y - iZ);
+
+            if (dX > dY && dX > dZ)
+            {
+                iX = -iY - iZ;
+            }
+            else if (dZ > dY)
+            {
+                iZ = -iX - iY;
+            }
+        }
+
+        return new HexCoordinates(iX, iZ);
+    }
+
+    public override string ToString()
+    {
+        return "(" +
+            X.ToString() + ", " + Y.ToString() + ", " + Z.ToString() + ")";
+    }
+
+    public string ToStringOnSeparateLines()
+    {
+        return X.ToString() + "\n" + Y.ToString() + "\n" + Z.ToString();
+    }
+
+    public void Save(BinaryWriter writer)
+    {
+        writer.Write(x);
+        writer.Write(z);
+    }
+
+    public static HexCoordinates Load(BinaryReader reader)
+    {
+        HexCoordinates c;
+        c.x = reader.ReadInt32();
+        c.z = reader.ReadInt32();
+        return c;
+    }
 }

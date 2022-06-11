@@ -103,22 +103,22 @@ namespace Cinemachine
         {
             m_FollowOffset = EffectiveOffset;
         }
-        
+
         /// <summary>Get the target offset, with sanitization</summary>
-        protected Vector3 EffectiveOffset 
-        { 
-            get 
-            { 
-                Vector3 offset = m_FollowOffset; 
+        protected Vector3 EffectiveOffset
+        {
+            get
+            {
+                Vector3 offset = m_FollowOffset;
                 if (m_BindingMode == BindingMode.SimpleFollowWithWorldUp)
                 {
                     offset.x = 0;
                     offset.z = -Mathf.Abs(offset.z);
                 }
                 return offset;
-            } 
+            }
         }
-        
+
         /// <summary>True if component is enabled and has a valid Follow target</summary>
         public override bool IsValid { get { return enabled && FollowTarget != null; } }
 
@@ -163,7 +163,7 @@ namespace Cinemachine
             if (m_previousTarget != FollowTarget || deltaTime < 0)
             {
                 m_previousTarget = FollowTarget;
-                m_targetOrientationOnAssign 
+                m_targetOrientationOnAssign
                     = (m_previousTarget == null) ? Quaternion.identity : FollowTarget.rotation;
             }
             if (deltaTime < 0)
@@ -187,7 +187,7 @@ namespace Cinemachine
             Quaternion dampedOrientation = targetOrientation;
             if (deltaTime >= 0)
             {
-                Vector3 relative = (Quaternion.Inverse(m_PreviousReferenceOrientation) 
+                Vector3 relative = (Quaternion.Inverse(m_PreviousReferenceOrientation)
                     * targetOrientation).eulerAngles;
                 for (int i = 0; i < 3; ++i)
                     if (relative[i] > 180)
@@ -222,16 +222,16 @@ namespace Cinemachine
         /// </summary>
         protected Vector3 Damping
         {
-            get 
-            { 
+            get
+            {
                 switch (m_BindingMode)
                 {
                     case BindingMode.SimpleFollowWithWorldUp:
-                        return new Vector3(0, m_YDamping, m_ZDamping); 
+                        return new Vector3(0, m_YDamping, m_ZDamping);
                     default:
-                        return new Vector3(m_XDamping, m_YDamping, m_ZDamping); 
+                        return new Vector3(m_XDamping, m_YDamping, m_ZDamping);
                 }
-            } 
+            }
         }
 
         /// <summary>
@@ -239,22 +239,22 @@ namespace Cinemachine
         /// </summary>
         protected Vector3 AngularDamping
         {
-            get 
-            { 
+            get
+            {
                 switch (m_BindingMode)
                 {
                     case BindingMode.LockToTargetNoRoll:
-                        return new Vector3(m_PitchDamping, m_YawDamping, 0); 
+                        return new Vector3(m_PitchDamping, m_YawDamping, 0);
                     case BindingMode.LockToTargetWithWorldUp:
-                        return new Vector3(0, m_YawDamping, 0); 
+                        return new Vector3(0, m_YawDamping, 0);
                     case BindingMode.LockToTargetOnAssign:
                     case BindingMode.WorldSpace:
                     case BindingMode.SimpleFollowWithWorldUp:
                         return Vector3.zero;
                     default:
-                        return new Vector3(m_PitchDamping, m_YawDamping, m_RollDamping); 
+                        return new Vector3(m_PitchDamping, m_YawDamping, m_RollDamping);
                 }
-            } 
+            }
         }
 
         /// <summary>Internal API for the Inspector Editor, so it can draw a marker at the target</summary>
@@ -288,17 +288,17 @@ namespace Cinemachine
                     case BindingMode.LockToTarget:
                         return targetOrientation;
                     case BindingMode.SimpleFollowWithWorldUp:
-                    {
-                        Vector3 dir = FollowTarget.position - VcamState.RawPosition;
-                        if (dir.AlmostZero())
-                            break;
-                        return Uppify(Quaternion.LookRotation(dir, worldUp), worldUp);
-                    }
+                        {
+                            Vector3 dir = FollowTarget.position - VcamState.RawPosition;
+                            if (dir.AlmostZero())
+                                break;
+                            return Uppify(Quaternion.LookRotation(dir, worldUp), worldUp);
+                        }
                     default:
                         break;
                 }
             }
-            return Quaternion.identity; 
+            return Quaternion.identity;
         }
 
         static Quaternion Uppify(Quaternion q, Vector3 up)

@@ -14,8 +14,8 @@ namespace Cinemachine
         protected const float Epsilon = Utility.UnityVectorExtensions.Epsilon;
 
         /// <summary>Get the associated CinemachineVirtualCameraBase</summary>
-        public CinemachineVirtualCameraBase VirtualCamera 
-        { 
+        public CinemachineVirtualCameraBase VirtualCamera
+        {
             get
             {
                 if (m_vcamOwner == null)

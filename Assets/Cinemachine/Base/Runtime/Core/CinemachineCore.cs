@@ -140,7 +140,7 @@ namespace Cinemachine
                 ++parentLevel;
             while (mChildCameras.Count < parentLevel)
                 mChildCameras.Add(new List<ICinemachineCamera>());
-            mChildCameras[parentLevel-1].Add(vcam);
+            mChildCameras[parentLevel - 1].Add(vcam);
         }
 
         /// <summary>Called when a child vcam is disabled.</summary>
@@ -158,7 +158,7 @@ namespace Cinemachine
 
             // Update the leaf-most cameras first
             //UnityEngine.Profiling.Profiler.BeginSample("CinemachineCore.UpdateAllActiveVirtualCameras.leaf-most");
-            for (int i = mChildCameras.Count-1; i >= 0; --i)
+            for (int i = mChildCameras.Count - 1; i >= 0; --i)
             {
                 numCameras = mChildCameras[i].Count;
                 for (int j = 0; j < numCameras; ++j)
@@ -183,7 +183,7 @@ namespace Cinemachine
             //UnityEngine.Profiling.Profiler.BeginSample("CinemachineCore.UpdateVirtualCamera");
             int now = Time.frameCount;
             UpdateFilter filter = CurrentUpdateFilter;
-            bool isSmartUpdate = filter != UpdateFilter.ForcedFixed 
+            bool isSmartUpdate = filter != UpdateFilter.ForcedFixed
                 && filter != UpdateFilter.ForcedLate;
             bool isSmartLateUpdate = filter == UpdateFilter.Late;
             if (!isSmartUpdate)
@@ -224,7 +224,7 @@ namespace Cinemachine
                 if (!GetTargetPosition(vcam, out targetPos))
                     updateNow = isSmartLateUpdate; // no target
                 else
-                    updateNow = status.ChoosePreferredUpdate(now, targetPos, filter) 
+                    updateNow = status.ChoosePreferredUpdate(now, targetPos, filter)
                         == filter;
             }
 
@@ -233,7 +233,7 @@ namespace Cinemachine
                 status.preferredUpdate = filter;
                 while (status.lastUpdateSubframe < subframes)
                 {
-//Debug.Log(vcam.Name + ": frame " + Time.frameCount + "." + status.lastUpdateSubframe + ", " + CurrentUpdateFilter + ", deltaTime = " + deltaTime);
+                    //Debug.Log(vcam.Name + ": frame " + Time.frameCount + "." + status.lastUpdateSubframe + ", " + CurrentUpdateFilter + ", deltaTime = " + deltaTime);
                     vcam.UpdateCameraState(worldUp, deltaTime);
                     ++status.lastUpdateSubframe;
                 }
@@ -293,7 +293,7 @@ namespace Cinemachine
                     choice = UpdateFilter.Fixed;
                 if (numWindows == 0)
                     preferredUpdate = choice;
- 
+
                 if (windowStart + kWindowSize <= currentFrame)
                 {
                     preferredUpdate = choice;

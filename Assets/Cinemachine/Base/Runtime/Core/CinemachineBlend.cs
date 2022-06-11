@@ -27,8 +27,8 @@ namespace Cinemachine
         /// BlendCurve at the current time relative to the start of the blend.
         /// 0 means camA, 1 means camB.</summary>
         public float BlendWeight
-        { 
-            get { return BlendCurve != null ? BlendCurve.Evaluate(TimeInBlend) : 0; } 
+        {
+            get { return BlendCurve != null ? BlendCurve.Evaluate(TimeInBlend) : 0; }
         }
 
         /// <summary>Validity test for the blend.  True if both cameras are defined.</summary>
@@ -50,7 +50,7 @@ namespace Cinemachine
         {
             get
             {
-                string fromName = (CamA != null) ? "[" + CamA.Name + "]": "(none)";
+                string fromName = (CamA != null) ? "[" + CamA.Name + "]" : "(none)";
                 string toName = (CamB != null) ? "[" + CamB.Name + "]" : "(none)";
                 int percent = (int)(BlendWeight * 100f);
                 return string.Format("{0} {1}% from {2}", toName, percent, fromName);
@@ -166,39 +166,39 @@ namespace Cinemachine
                     case Style.Cut: return new AnimationCurve();
                     case Style.EaseInOut: return AnimationCurve.EaseInOut(0f, 0f, time, 1f);
                     case Style.EaseIn:
-                    {
-                        AnimationCurve curve = AnimationCurve.Linear(0f, 0f, time, 1f);
-                        Keyframe[] keys = curve.keys;
-                        keys[1].inTangent = 0;
-                        curve.keys = keys;
-                        return curve;
-                    }
+                        {
+                            AnimationCurve curve = AnimationCurve.Linear(0f, 0f, time, 1f);
+                            Keyframe[] keys = curve.keys;
+                            keys[1].inTangent = 0;
+                            curve.keys = keys;
+                            return curve;
+                        }
                     case Style.EaseOut:
-                    {
-                        AnimationCurve curve = AnimationCurve.Linear(0f, 0f, time, 1f);
-                        Keyframe[] keys = curve.keys;
-                        keys[0].outTangent = 0;
-                        curve.keys = keys;
-                        return curve;
-                    }
+                        {
+                            AnimationCurve curve = AnimationCurve.Linear(0f, 0f, time, 1f);
+                            Keyframe[] keys = curve.keys;
+                            keys[0].outTangent = 0;
+                            curve.keys = keys;
+                            return curve;
+                        }
                     case Style.HardIn:
-                    {
-                        AnimationCurve curve = AnimationCurve.Linear(0f, 0f, time, 1f);
-                        Keyframe[] keys = curve.keys;
-                        keys[0].outTangent = 0;
-                        keys[1].inTangent = 1.5708f; // pi/2 = up
-                        curve.keys = keys;
-                        return curve;
-                    }
+                        {
+                            AnimationCurve curve = AnimationCurve.Linear(0f, 0f, time, 1f);
+                            Keyframe[] keys = curve.keys;
+                            keys[0].outTangent = 0;
+                            keys[1].inTangent = 1.5708f; // pi/2 = up
+                            curve.keys = keys;
+                            return curve;
+                        }
                     case Style.HardOut:
-                    {
-                        AnimationCurve curve = AnimationCurve.Linear(0f, 0f, time, 1f);
-                        Keyframe[] keys = curve.keys;
-                        keys[0].outTangent = 1.5708f; // pi/2 = up
-                        keys[1].inTangent = 0;
-                        curve.keys = keys;
-                        return curve;
-                    }
+                        {
+                            AnimationCurve curve = AnimationCurve.Linear(0f, 0f, time, 1f);
+                            Keyframe[] keys = curve.keys;
+                            keys[0].outTangent = 1.5708f; // pi/2 = up
+                            keys[1].inTangent = 0;
+                            curve.keys = keys;
+                            return curve;
+                        }
                     case Style.Linear: return AnimationCurve.Linear(0f, 0f, time, 1f);
                 }
             }

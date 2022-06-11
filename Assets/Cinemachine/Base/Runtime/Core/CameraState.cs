@@ -132,18 +132,18 @@ namespace Cinemachine
 
         /// <summary>Opaque structure represent extra blendable stuff and its weight.
         /// The base system ignores this data - it is intended for extension modules</summary>
-        public struct CustomBlendable 
-        { 
+        public struct CustomBlendable
+        {
             /// <summary>The custom stuff that the extention module will consider</summary>
-            public Object m_Custom; 
+            public Object m_Custom;
             /// <summary>The weight of the custom stuff.  Must be 0...1</summary>
-            public float m_Weight; 
+            public float m_Weight;
 
             /// <summary>Constructor with specific values</summary>
             /// <param name="custom">The custom stuff that the extention module will consider</param>
             /// <param name="weight">The weight of the custom stuff.  Must be 0...1</param>
-            public CustomBlendable(Object custom, float weight) 
-                { m_Custom = custom; m_Weight = weight; }
+            public CustomBlendable(Object custom, float weight)
+            { m_Custom = custom; m_Weight = weight; }
         };
 
         // This is to avoid excessive GC allocs
@@ -171,13 +171,13 @@ namespace Cinemachine
                 case 1: return mCustom1;
                 case 2: return mCustom2;
                 case 3: return mCustom3;
-                default: 
-                {
-                    index -= 4;
-                    if (m_CustomOverflow != null && index < m_CustomOverflow.Count)
-                        return m_CustomOverflow[index];
-                    return new CustomBlendable(null, 0);
-                }
+                default:
+                    {
+                        index -= 4;
+                        if (m_CustomOverflow != null && index < m_CustomOverflow.Count)
+                            return m_CustomOverflow[index];
+                        return new CustomBlendable(null, 0);
+                    }
             }
         }
 
@@ -222,15 +222,15 @@ namespace Cinemachine
                 case 1: mCustom1 = b; break;
                 case 2: mCustom2 = b; break;
                 case 3: mCustom3 = b; break;
-                default: 
-                {
-                    if (m_CustomOverflow == null)
-                        m_CustomOverflow = new List<CustomBlendable>();
-                    m_CustomOverflow.Add(b);
-                    break;
-                }
+                default:
+                    {
+                        if (m_CustomOverflow == null)
+                            m_CustomOverflow = new List<CustomBlendable>();
+                        m_CustomOverflow.Add(b);
+                        break;
+                    }
             }
-         }
+        }
 
         /// <summary>Intelligently blend the contents of two states.</summary>
         /// <param name="stateA">The first state, corresponding to t=0</param>
@@ -278,7 +278,7 @@ namespace Cinemachine
                 // Linear interpolation of lookAt target point
                 state.ReferenceLookAt = Vector3.Lerp(
                         stateA.ReferenceLookAt, stateB.ReferenceLookAt, adjustedT);
-                
+
                 // If orientations are different, use LookAt to blend them
                 float angle = Quaternion.Angle(stateA.RawOrientation, stateB.RawOrientation);
                 if (angle > UnityVectorExtensions.Epsilon)
@@ -322,7 +322,7 @@ namespace Cinemachine
             for (int i = 0; i < stateA.NumCustomBlendables; ++i)
             {
                 CustomBlendable b = stateA.GetCustomBlendable(i);
-                b.m_Weight *= (1-t);
+                b.m_Weight *= (1 - t);
                 if (b.m_Weight > UnityVectorExtensions.Epsilon)
                     state.AddCustomBlendable(b);
             }

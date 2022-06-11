@@ -133,7 +133,7 @@ namespace Cinemachine
 
             return pos;
         }
-        
+
 #if UNITY_EDITOR
         private void OnGUI() { if (OnGUICallback != null) OnGUICallback(); }
 #endif
@@ -145,7 +145,7 @@ namespace Cinemachine
         Quaternion m_CameraOrientationPrevFrame = Quaternion.identity;
         PositionPredictor m_Predictor = new PositionPredictor();
 
-        public override void PrePipelineMutateCameraState(ref CameraState curState) 
+        public override void PrePipelineMutateCameraState(ref CameraState curState)
         {
             if (IsValid && curState.HasLookAt)
                 curState.ReferenceLookAt = GetLookAtPointAndSetTrackedPoint(curState.ReferenceLookAt);
@@ -160,7 +160,7 @@ namespace Cinemachine
             // Initialize the state for previous frame if appropriate
             if (deltaTime < 0)
                 m_Predictor.Reset();
-                
+
             if (!IsValid || !curState.HasLookAt)
                 return;
 
@@ -181,7 +181,7 @@ namespace Cinemachine
                 fovH = Mathf.Rad2Deg * 2 * Mathf.Atan(
                     curState.Lens.Aspect * curState.Lens.OrthographicSize / targetDistance);
             }
-            else 
+            else
             {
                 fov = curState.Lens.FieldOfView;
                 double radHFOV = 2 * Math.Atan(Math.Tan(fov * Mathf.Deg2Rad / 2) * curState.Lens.Aspect);
@@ -200,10 +200,10 @@ namespace Cinemachine
             {
                 // Start with previous frame's orientation (but with current up)
                 Vector3 dir = m_LookAtPrevFrame - (m_CameraPosPrevFrame + curState.PositionDampingBypass);
-                if (dir.AlmostZero())  
+                if (dir.AlmostZero())
                     rigOrientation = Quaternion.LookRotation(
                         m_CameraOrientationPrevFrame * Vector3.forward, curState.ReferenceUp);
-                else 
+                else
                 {
                     rigOrientation = Quaternion.LookRotation(dir, curState.ReferenceUp);
                     rigOrientation = rigOrientation.ApplyCameraRotation(
@@ -274,7 +274,7 @@ namespace Cinemachine
                 m_BiasY = biasHeight < Epsilon ? 0 : Mathf.Clamp(bias.y / biasHeight, -0.5f, 0.5f);
             }
         }
-        
+
         // Convert from screen coords to normalized FOV angular coords
         private Rect ScreenToFOV(Rect rScreen, float fov, float fovH, float aspect)
         {
@@ -289,11 +289,11 @@ namespace Cinemachine
             angle = UnityVectorExtensions.SignedAngle(Vector3.forward, p, Vector3.left);
             r.yMax = ((fov / 2) + angle) / fov;
 
-            p = persp.MultiplyPoint(new Vector3((r.xMin * 2f) - 1f, 0, 0.1f));  p.z = -p.z;
+            p = persp.MultiplyPoint(new Vector3((r.xMin * 2f) - 1f, 0, 0.1f)); p.z = -p.z;
             angle = UnityVectorExtensions.SignedAngle(Vector3.forward, p, Vector3.up);
             r.xMin = ((fovH / 2) + angle) / fovH;
 
-            p = persp.MultiplyPoint(new Vector3((r.xMax * 2f) - 1f, 0, 0.1f));  p.z = -p.z;
+            p = persp.MultiplyPoint(new Vector3((r.xMax * 2f) - 1f, 0, 0.1f)); p.z = -p.z;
             angle = UnityVectorExtensions.SignedAngle(Vector3.forward, p, Vector3.up);
             r.xMax = ((fovH / 2) + angle) / fovH;
             return r;
@@ -349,7 +349,7 @@ namespace Cinemachine
             // that it would be damped
             return Mathf.Abs(rotToRect.x) > Epsilon || Mathf.Abs(rotToRect.y) > Epsilon;
 #else
-            return false; 
+            return false;
 #endif
         }
 

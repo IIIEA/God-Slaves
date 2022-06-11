@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
-namespace FlatKit {
-    public class UvScroller : MonoBehaviour {
+namespace FlatKit
+{
+    public class UvScroller : MonoBehaviour
+    {
         public Material targetMaterial;
         public float speedX = 0f;
         public float speedY = 0f;
@@ -9,16 +11,19 @@ namespace FlatKit {
         private Vector2 offset;
         private Vector2 initOffset;
 
-        void Start() {
+        void Start()
+        {
             offset = targetMaterial.mainTextureOffset;
             initOffset = targetMaterial.mainTextureOffset;
         }
 
-        void OnDisable() {
+        void OnDisable()
+        {
             targetMaterial.mainTextureOffset = initOffset;
         }
 
-        void Update() {
+        void Update()
+        {
             offset.x += speedX * Time.deltaTime;
             offset.y += speedY * Time.deltaTime;
             targetMaterial.mainTextureOffset = offset;

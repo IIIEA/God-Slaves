@@ -98,7 +98,7 @@ namespace Cinemachine
             int index;
             if (m_indexMap.TryGetValue(vcam, out index))
                 return GetWeight(index);
-            Debug.LogError("CinemachineMixingCamera: Invalid child: " 
+            Debug.LogError("CinemachineMixingCamera: Invalid child: "
                 + ((vcam != null) ? vcam.Name : "(null)"));
             return 0;
         }
@@ -112,7 +112,7 @@ namespace Cinemachine
             if (m_indexMap.TryGetValue(vcam, out index))
                 SetWeight(index, w);
             else
-                Debug.LogError("CinemachineMixingCamera: Invalid child: " 
+                Debug.LogError("CinemachineMixingCamera: Invalid child: "
                     + ((vcam != null) ? vcam.Name : "(null)"));
         }
 
@@ -166,12 +166,12 @@ namespace Cinemachine
             for (int i = 0; i < MaxCameras; ++i)
                 SetWeight(i, Mathf.Max(0, GetWeight(i)));
         }
-        
+
         /// <summary>Check whether the vcam a live child of this camera.</summary>
         /// <param name="vcam">The Virtual Camera to check</param>
         /// <returns>True if the vcam is currently actively influencing the state of this vcam</returns>
-        public override bool IsLiveChild(ICinemachineCamera vcam) 
-        { 
+        public override bool IsLiveChild(ICinemachineCamera vcam)
+        {
             CinemachineVirtualCameraBase[] children = ChildCameras;
             for (int i = 0; i < MaxCameras && i < children.Length; ++i)
                 if ((ICinemachineCamera)children[i] == vcam)
@@ -187,16 +187,16 @@ namespace Cinemachine
         /// Note: only the first entries of this list participate in the 
         /// final blend, up to MaxCameras</summary>
         public CinemachineVirtualCameraBase[] ChildCameras
-        { 
+        {
             get { ValidateListOfChildren(); return m_ChildCameras; }
         }
 
         /// <summary>Invalidate the cached list of child cameras.</summary>
-        protected void InvalidateListOfChildren() 
-        { 
-            m_ChildCameras = null; 
+        protected void InvalidateListOfChildren()
+        {
+            m_ChildCameras = null;
             m_indexMap = null;
-            LiveChild = null; 
+            LiveChild = null;
         }
 
         /// <summary>Rebuild the cached list of child cameras.</summary>
@@ -207,7 +207,7 @@ namespace Cinemachine
 
             m_indexMap = new Dictionary<CinemachineVirtualCameraBase, int>();
             List<CinemachineVirtualCameraBase> list = new List<CinemachineVirtualCameraBase>();
-            CinemachineVirtualCameraBase[] kids 
+            CinemachineVirtualCameraBase[] kids
                 = GetComponentsInChildren<CinemachineVirtualCameraBase>(true);
             foreach (CinemachineVirtualCameraBase k in kids)
             {

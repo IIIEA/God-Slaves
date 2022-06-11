@@ -25,7 +25,7 @@ namespace Cinemachine
         public override CameraState State { get { return m_State; } }
 
         /// <summary>The object that the camera is looking at</summary>
-        override public Transform LookAt 
+        override public Transform LookAt
         {
             get { return m_LookAt; }
             set { m_LookAt = value; }

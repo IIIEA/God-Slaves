@@ -18,8 +18,8 @@ namespace Cinemachine.Utility
         {
             t = Mathf.Clamp01(t);
             return (-3f * p0 + 9f * p1 - 9f * p2 + 3f * p3) * t * t
-                +  (6f * p0 - 12f * p1 + 6f * p2) * t
-                -  3f * p0 + 3f * p1;
+                + (6f * p0 - 12f * p1 + 6f * p2) * t
+                - 3f * p0 + 3f * p1;
         }
 
         public static float Bezier1(float t, float p0, float p1, float p2, float p3)
@@ -35,8 +35,8 @@ namespace Cinemachine.Utility
         {
             t = Mathf.Clamp01(t);
             return (-3f * p0 + 9f * p1 - 9f * p2 + 3f * p3) * t * t
-                +  (6f * p0 - 12f * p1 + 6f * p2) * t
-                -  3f * p0 + 3f * p1;
+                + (6f * p0 - 12f * p1 + 6f * p2) * t
+                - 3f * p0 + 3f * p1;
         }
 
         public static void ComputeSmoothControlPoints(
@@ -75,7 +75,7 @@ namespace Cinemachine.Utility
                     a[i] = 1;
                     b[i] = 4;
                     c[i] = 1;
-                    r[i] = 4 * knot[i][axis] + 2 * knot[i+1][axis];
+                    r[i] = 4 * knot[i][axis] + 2 * knot[i + 1][axis];
                 }
 
                 // Linear out of the last segment 
@@ -87,13 +87,13 @@ namespace Cinemachine.Utility
                 // Solve with Thomas algorithm
                 for (int i = 1; i < n; ++i)
                 {
-                    float m = a[i] / b[i-1];
-                    b[i] = b[i] - m * c[i-1];
-                    r[i] = r[i] - m * r[i-1];
+                    float m = a[i] / b[i - 1];
+                    b[i] = b[i] - m * c[i - 1];
+                    r[i] = r[i] - m * r[i - 1];
                 }
 
                 // Compute ctrl1
-                ctrl1[n-1][axis] = r[n-1] / b[n-1];
+                ctrl1[n - 1][axis] = r[n - 1] / b[n - 1];
                 for (int i = n - 2; i >= 0; --i)
                     ctrl1[i][axis] = (r[i] - c[i] * ctrl1[i + 1][axis]) / b[i];
 
@@ -115,14 +115,14 @@ namespace Cinemachine.Utility
                 return;
             }
 
-            int margin = Mathf.Min(4, numPoints-1);
+            int margin = Mathf.Min(4, numPoints - 1);
             Vector4[] knotLooped = new Vector4[numPoints + 2 * margin];
             Vector4[] ctrl1Looped = new Vector4[numPoints + 2 * margin];
             Vector4[] ctrl2Looped = new Vector4[numPoints + 2 * margin];
             for (int i = 0; i < margin; ++i)
             {
-                knotLooped[i] = knot[numPoints-(margin-i)];
-                knotLooped[numPoints+margin+i] = knot[i];
+                knotLooped[i] = knot[numPoints - (margin - i)];
+                knotLooped[numPoints + margin + i] = knot[i];
             }
             for (int i = 0; i < numPoints; ++i)
                 knotLooped[i + margin] = knot[i];

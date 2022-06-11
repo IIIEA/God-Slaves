@@ -40,10 +40,10 @@ namespace Cinemachine
         public CinemachineCore.Stage[] m_LockStageInInspector;
 
         /// <summary>Version that was last streamed, for upgrading legacy</summary>
-        public int ValidatingStreamVersion 
-        { 
+        public int ValidatingStreamVersion
+        {
             get { return m_OnValidateCalled ? m_ValidatingStreamVersion : CinemachineCore.kStreamingVersion; }
-            private set { m_ValidatingStreamVersion = value; } 
+            private set { m_ValidatingStreamVersion = value; }
         }
         private int m_ValidatingStreamVersion = 0;
         private bool m_OnValidateCalled = false;
@@ -122,7 +122,7 @@ namespace Cinemachine
         public string Name { get { return name; } }
 
         /// <summary>Gets a brief debug description of this virtual camera, for use when displayiong debug info</summary>
-        public virtual string Description { get { return ""; }}
+        public virtual string Description { get { return ""; } }
 
         /// <summary>Get the Priority of the virtual camera.  This determines its placement
         /// in the CinemachineCore's queue of eligible shots.</summary>
@@ -173,8 +173,8 @@ namespace Cinemachine
         public abstract Transform Follow { get; set; }
 
         /// <summary>Set this to force the next update to ignore deltaTime and reset itself</summary>
-        public bool PreviousStateIsValid 
-        { 
+        public bool PreviousStateIsValid
+        {
             get
             {
                 if (LookAt != m_previousLookAtTarget)
@@ -212,7 +212,7 @@ namespace Cinemachine
         /// <param name="worldUp">Default world Up, set by the CinemachineBrain</param>
         /// <param name="deltaTime">Delta time for time-based effects (ignore if less than or equal to 0)</param>
         public virtual void OnTransitionFromCamera(
-            ICinemachineCamera fromCam, Vector3 worldUp, float deltaTime) 
+            ICinemachineCamera fromCam, Vector3 worldUp, float deltaTime)
         {
             if (!gameObject.activeInHierarchy)
                 PreviousStateIsValid = false;
