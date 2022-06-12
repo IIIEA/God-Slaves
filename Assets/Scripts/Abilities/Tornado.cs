@@ -161,6 +161,6 @@ public class Tornado : MonoBehaviour
 
     private Vector3 GetRandomDirection()
     {
-        return Quaternion.Euler(0, Random.Range(-45f, 45f), 0) * transform.forward;
+        return Quaternion.Euler(0, Random.Range(-180f, 180f), 0) * transform.forward;
     }
 }
