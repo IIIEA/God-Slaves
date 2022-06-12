@@ -14,7 +14,7 @@ public class HexUnit : MonoBehaviour
     private bool _isAttached;
 
     const float rotationSpeed = 180f;
-    const float travelSpeed = 4f;
+    const float travelSpeed = 2f;
 
     public static HexUnit unitPrefab;
 
@@ -24,6 +24,7 @@ public class HexUnit : MonoBehaviour
     public HexGrid Grid { get; set; }
 
     public event Action<HexUnit, HexCell> Treveled;
+    public event Action<HexUnit> Died;
 
     public HexCell Location
     {
@@ -308,8 +309,21 @@ public class HexUnit : MonoBehaviour
             Grid.DecreaseVisibility(location, VisionRange);
         }
 
+        Died?.Invoke(this);
         location.Unit = null;
         Destroy(gameObject);
+    }
+
+    public void DieWithDelay()
+    {
+        if (location)
+        {
+            Grid.DecreaseVisibility(location, VisionRange);
+        }
+
+        Died?.Invoke(this);
+        location.Unit = null;
+        Destroy(gameObject, 5f);
     }
 
     public void Save(BinaryWriter writer)

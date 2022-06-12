@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class HexMapGenerator : MonoBehaviour
@@ -11,6 +12,9 @@ public class HexMapGenerator : MonoBehaviour
 
     [Range(20f, 100f)]
     [SerializeField] private float _spawnUnitChance;
+    [Range(0f, 20f)]
+    [SerializeField] private float _spawnChanceAfterStart;
+    [SerializeField] private float _delay;
 
     [Range(0f, 0.5f)]
     public float jitterProbability = 0.25f;
@@ -104,6 +108,8 @@ public class HexMapGenerator : MonoBehaviour
 
     int temperatureJitterChannel;
 
+    private int _counter = 0;
+
     struct MapRegion
     {
         public int xMin, xMax, zMin, zMax;
@@ -145,6 +151,19 @@ public class HexMapGenerator : MonoBehaviour
         new Biome(0, 0, 0, 4), new Biome(1, 1, 0, 4), new Biome(1, 1, 0, 0), new Biome(1, 3, 0, 0)
     };
 
+    private void Start()
+    {
+        StartCoroutine(Spawn());
+    }
+
+    private IEnumerator Spawn()
+    {
+        yield return new WaitForSeconds(_delay);
+
+        SpawnUnits(_spawnChanceAfterStart);
+        StartCoroutine(Spawn());
+    }
+
     public void GenerateMap(int x, int z, bool wrapping)
     {
         Random.State originalRandomState = Random.state;
@@ -183,7 +202,7 @@ public class HexMapGenerator : MonoBehaviour
             grid.GetCell(i).SearchPhase = 0;
         }
 
-        SpawnUnits();
+        SpawnUnitsWithCounter(_spawnUnitChance);
 
         Random.state = originalRandomState;
     }
@@ -979,7 +998,7 @@ public class HexMapGenerator : MonoBehaviour
         cell.FarmLevel = cellBiome.Farm;
     }
 
-    private void SpawnUnits()
+    private void SpawnUnitsWithCounter(float chance)
     {
         for (int i = 0; i < cellCount; i++)
         {
@@ -987,9 +1006,30 @@ public class HexMapGenerator : MonoBehaviour
 
             if (!cell.IsUnderwater)
             {
-                if (Random.Range(0, 100) <= _spawnUnitChance)
+                _counter++;
+
+                if (Random.Range(0, 100) <= chance)
                 {
                     grid.AddUnit(Instantiate(UnitsHolder.GetRandomUnit()), cell, Random.Range(0f, 360f));
+                }
+            }
+        }
+    }
+
+    private void SpawnUnits(float chance)
+    {
+        if (grid.Units.Count < _counter / 4)
+        {
+            for (int i = 0; i < cellCount; i++)
+            {
+                HexCell cell = grid.GetCell(i);
+
+                if (!cell.IsUnderwater)
+                {
+                    if (Random.Range(0, 100) <= chance)
+                    {
+                        grid.AddUnit(Instantiate(UnitsHolder.GetRandomUnit()), cell, Random.Range(0f, 360f));
+                    }
                 }
             }
         }

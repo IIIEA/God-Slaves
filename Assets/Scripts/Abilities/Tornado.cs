@@ -26,6 +26,7 @@ public class Tornado : MonoBehaviour
 
     private Vector3 _direction;
     private List<TornadoCaughter> _caughtObject = new List<TornadoCaughter>();
+    private List<HexUnit> _units = new List<HexUnit>();
 
     public Vector3 RotationAxis => _rotationAxis;
     public float RotationStrength => _rotationStrength;
@@ -67,9 +68,8 @@ public class Tornado : MonoBehaviour
     {
         if (other.TryGetComponent<HexUnit>(out HexUnit unit))
         {
-            ReliableOnTriggerExit.NotifyTriggerEnter(other, gameObject, OnTriggerExit);
-
             unit.SetAttached();
+            _units.Add(unit);
 
             if (!other.attachedRigidbody)
                 return;
@@ -93,31 +93,20 @@ public class Tornado : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        ReliableOnTriggerExit.NotifyTriggerExit(other, gameObject);
-
-        TornadoCaughter caught = other.GetComponent<TornadoCaughter>();
-
-        if (caught)
-        {
-            StartCoroutine(Die(caught.GetComponent<HexUnit>()));
-        }
-    }
-
     private void OnDisable()
     {
         for (int i = 0; i < _caughtObject.Count; i++)
         {
-            _caughtObject[i].enabled = false;
+            if (_caughtObject[i] != null)
+            {
+                _caughtObject[i].enabled = false;
+            }
         }
-    }
 
-    private IEnumerator Die(HexUnit unit)
-    {
-        yield return new WaitForSeconds(10f);
-
-        unit.Die();
+        foreach (var unit in _units)
+        {
+            unit.DieWithDelay();
+        }
     }
 
     private void OnDrawGizmosSelected()

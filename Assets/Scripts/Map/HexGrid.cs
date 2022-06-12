@@ -33,6 +33,7 @@ public class HexGrid : MonoBehaviour
     public List<HexUnit> Units => _units;
 
     public event Action<HexUnit> UnitAdded;
+    public event Action<int> UnitCountChanged;
 
     private void Awake()
     {
@@ -42,6 +43,11 @@ public class HexGrid : MonoBehaviour
         _cellShaderData = gameObject.AddComponent<HexCellShaderData>();
         _cellShaderData.Grid = this;
         CreateMap(cellCountX, cellCountZ, wrapping);
+    }
+
+    private void Start()
+    {
+        UnitCountChanged?.Invoke(_units.Count);
     }
 
     private void OnEnable()
@@ -56,10 +62,26 @@ public class HexGrid : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        foreach (var unit in _units)
+        {
+            unit.Died -= OnUnitDied;
+        }
+    }
+
+    private void OnUnitDied(HexUnit unit)
+    {
+        _units.Remove(unit);
+        UnitCountChanged?.Invoke(_units.Count);
+    }
+
     public void AddUnit(HexUnit unit, HexCell location, float orientation)
     {
+        unit.Died += OnUnitDied;
         UnitAdded?.Invoke(unit);
         _units.Add(unit);
+        UnitCountChanged?.Invoke(_units.Count);
         unit.Grid = this;
         unit.Location = location;
         unit.Orientation = orientation;
@@ -68,6 +90,7 @@ public class HexGrid : MonoBehaviour
     public void RemoveUnit(HexUnit unit)
     {
         _units.Remove(unit);
+        UnitCountChanged?.Invoke(_units.Count);
         unit.Die();
     }
 
