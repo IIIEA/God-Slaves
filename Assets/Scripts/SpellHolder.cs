@@ -17,13 +17,23 @@ public class SpellHolder : MonoBehaviour
 
     private void UseAbility()
     {
-        var position = GetCellUnderCursor();
-
-        var ability = Instantiate(_prefab, position, _prefab.transform.rotation);
+        if (GetCellUnderCursor(out Vector3 position))
+        {
+            var ability = Instantiate(_prefab, position, _prefab.transform.rotation);
+        }
     }
 
-    private Vector3 GetCellUnderCursor()
+    private bool GetCellUnderCursor(out Vector3 position)
     {
-        return _grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition)).transform.position;
+        var cell = _grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
+
+        if(cell == null)
+        {
+            position = Vector3.zero;
+            return false;
+        }
+
+        position = cell.transform.position;
+        return true;
     }
 }

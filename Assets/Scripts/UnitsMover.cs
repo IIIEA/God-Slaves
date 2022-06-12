@@ -29,7 +29,7 @@ public class UnitsMover : MonoBehaviour
 
     private void OnTreveled(HexUnit unit, HexCell cell)
     {
-        if(unit.InTravel == false)
+        if(unit.InTravel == false && unit.IsAtached == false)
         {
             DoPathfinding(unit, cell);
             DoMove(unit);

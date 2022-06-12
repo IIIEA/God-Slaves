@@ -11,12 +11,14 @@ public class HexUnit : MonoBehaviour
     private float _orientation;
     private List<HexCell> _pathToTravel;
     private HexCell location, currentTravelLocation;
+    private bool _isAttached;
 
     const float rotationSpeed = 180f;
     const float travelSpeed = 4f;
 
     public static HexUnit unitPrefab;
 
+    public bool IsAtached => _isAttached;
     public HexCell CellToTravel { get; private set; }
     public bool InTravel { get; private set; }
     public HexGrid Grid { get; set; }
@@ -130,6 +132,11 @@ public class HexUnit : MonoBehaviour
     public bool IsValidDestination(HexCell cell)
     {
         return !cell.IsUnderwater;
+    }
+
+    public void SetAttached()
+    {
+        _isAttached = true;
     }
 
     public void Travel(List<HexCell> path)
