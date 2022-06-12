@@ -53,7 +53,7 @@ public class TornadoCaughter : MonoBehaviour
 
         Vector3 initialPosition = Vector3.zero;
         initialPosition.y = transform.position.y;
-        _spring.connectedAnchor = initialPosition + Vector3.up * 15;
+        _spring.connectedAnchor = initialPosition;
     }
 
     public void Release()

@@ -94,7 +94,7 @@ public class HexUnit : MonoBehaviour
 
     private void OnDestroy()
     {
-        DOTween.CompleteAll();
+        DOTween.Clear();
     }
 
     private void FindTravel()

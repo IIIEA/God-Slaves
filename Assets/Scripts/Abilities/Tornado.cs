@@ -68,6 +68,8 @@ public class Tornado : MonoBehaviour
     {
         if (other.TryGetComponent<HexUnit>(out HexUnit unit))
         {
+            ReliableOnTriggerExit.NotifyTriggerEnter(other, gameObject, OnTriggerExit);
+
             unit.SetAttached();
             _units.Add(unit);
 
@@ -93,6 +95,23 @@ public class Tornado : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        ReliableOnTriggerExit.NotifyTriggerExit(other, gameObject);
+
+        TornadoCaughter caught = other.GetComponent<TornadoCaughter>();
+
+        if (caught)
+        {
+            caught.Release();
+
+            if (_caughtObject.Contains(caught))
+            {
+                _caughtObject.Remove(caught);
+            }
+        }
+    }
+
     private void OnDisable()
     {
         for (int i = 0; i < _caughtObject.Count; i++)
@@ -101,11 +120,6 @@ public class Tornado : MonoBehaviour
             {
                 _caughtObject[i].enabled = false;
             }
-        }
-
-        foreach (var unit in _units)
-        {
-            unit.DieWithDelay();
         }
     }
 
