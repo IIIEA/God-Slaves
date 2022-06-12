@@ -90,22 +90,33 @@ public class HexUnit : MonoBehaviour
     {
         if (InTravel == false)
         {
-            Collider[] cells = Physics.OverlapSphere(transform.position, 50f, _groundLayer);
-            int index;
-
-            do
-            {
-                index = UnityEngine.Random.Range(0, cells.Length - 1);
-                CellToTravel = cells[index].GetComponent<HexCell>();
-
-                if (CellToTravel == Location)
-                    return;
-
-            } while (CellToTravel.IsUnderwater == true);
-
             if (_turn)
             {
                 _turn = false;
+
+                Collider[] cells = Physics.OverlapSphere(transform.position, 100f, _groundLayer);
+                int index;
+
+                do
+                {
+                    index = UnityEngine.Random.Range(0, cells.Length - 1);
+
+                    if(index > cells.Length - 1)
+                    {
+                        _turn = true;
+                        return;
+                    }
+
+                    CellToTravel = cells[index].GetComponent<HexCell>();
+
+                    if (CellToTravel == Location)
+                    {
+                        _turn = true;
+                        return;
+                    }
+
+                } while (CellToTravel.IsUnderwater == true);
+
                 Treveled?.Invoke(this, CellToTravel);
             }
         }

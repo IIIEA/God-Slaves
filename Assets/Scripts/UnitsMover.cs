@@ -31,7 +31,6 @@ public class UnitsMover : MonoBehaviour
     {
         if(unit.InTravel == false)
         {
-            Debug.Log("suka");
             DoPathfinding(unit, cell);
             DoMove(unit);
         }
