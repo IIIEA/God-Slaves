@@ -123,15 +123,14 @@ public class HexMapGenerator : MonoBehaviour
 
     struct Biome
     {
-        public int Terrain, Plant, Farm, Urban, Special;
+        public int Terrain, Plant, Farm, Urban;
 
-        public Biome(int terrain, int plant, int farm, int urban, int special)
+        public Biome(int terrain, int plant, int farm, int urban)
         {
             Terrain = terrain;
             Plant = plant;
             Farm = farm;
             Urban = urban;
-            Special = special;
         }
     }
 
@@ -140,10 +139,10 @@ public class HexMapGenerator : MonoBehaviour
     static float[] moistureBands = { 0.12f, 0.28f, 0.85f };
 
     static Biome[] biomes = {
-        new Biome(0, 0, 0, 4, 0), new Biome(4, 0, 0, 0, 0), new Biome(4, 0, 0, 0, 0), new Biome(4, 0, 0, 0, 0),
-        new Biome(0, 0, 0, 4, 0), new Biome(3, 0, 0, 0, 0), new Biome(3, 1, 1, 0, 0), new Biome(2, 1, 0, 0, 0),
-        new Biome(0, 0, 0, 4, 0), new Biome(1, 0, 0, 0, 0), new Biome(1, 1, 1, 0, 0), new Biome(2, 1, 0, 0, 0),
-        new Biome(0, 0, 0, 4, 0), new Biome(1, 1, 0, 0, 0), new Biome(1, 1, 0, 0, 0), new Biome(1, 3, 0, 0, 0)
+        new Biome(0, 0, 0, 4), new Biome(4, 0, 0, 0), new Biome(4, 0, 0, 1), new Biome(4, 0, 0, 0),
+        new Biome(0, 0, 0, 4), new Biome(3, 0, 0, 0), new Biome(3, 1, 1, 1), new Biome(2, 1, 0, 1),
+        new Biome(0, 0, 0, 4), new Biome(1, 0, 0, 4), new Biome(1, 1, 1, 0), new Biome(2, 1, 0, 0),
+        new Biome(0, 0, 0, 4), new Biome(1, 1, 0, 4), new Biome(1, 1, 0, 0), new Biome(1, 3, 0, 0)
     };
 
     public void GenerateMap(int x, int z, bool wrapping)
@@ -964,11 +963,6 @@ public class HexMapGenerator : MonoBehaviour
         }
 
         cell.UrbanLevel = cellBiome.Urban;
-    }
-
-    private void SetSpecialLevel(Biome cellBiome, HexCell cell)
-    {
-
     }
 
     private void SetFarmLevel(Biome cellBiome, HexCell cell)
