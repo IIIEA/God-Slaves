@@ -92,39 +92,40 @@ public class HexUnit : MonoBehaviour
         FindTravel();
     }
 
+    private void OnDestroy()
+    {
+        DOTween.CompleteAll();
+    }
+
     private void FindTravel()
     {
         if (InTravel == false)
         {
-            if (_turn)
+            Collider[] cells = Physics.OverlapSphere(transform.position, 100f, _groundLayer);
+            int index;
+
+            do
             {
-                _turn = false;
+                index = UnityEngine.Random.Range(0, cells.Length - 1);
 
-                Collider[] cells = Physics.OverlapSphere(transform.position, 100f, _groundLayer);
-                int index;
-
-                do
+                if (index > cells.Length - 1)
                 {
-                    index = UnityEngine.Random.Range(0, cells.Length - 1);
+                    _turn = true;
+                    return;
+                }
 
-                    if(index > cells.Length - 1)
-                    {
-                        _turn = true;
-                        return;
-                    }
+                CellToTravel = cells[index].GetComponent<HexCell>();
 
-                    CellToTravel = cells[index].GetComponent<HexCell>();
+                if (CellToTravel == Location)
+                {
+                    _turn = true;
+                    return;
+                }
 
-                    if (CellToTravel == Location)
-                    {
-                        _turn = true;
-                        return;
-                    }
+            } while (CellToTravel.IsUnderwater == true);
 
-                } while (CellToTravel.IsUnderwater == true);
+            Treveled?.Invoke(this, CellToTravel);
 
-                Treveled?.Invoke(this, CellToTravel);
-            }
         }
     }
 

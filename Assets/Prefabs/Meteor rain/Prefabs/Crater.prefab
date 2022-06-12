@@ -48878,6 +48878,7 @@ GameObject:
   - component: {fileID: 198090912862583912}
   - component: {fileID: 199217752770658302}
   - component: {fileID: -5808027062509969221}
+  - component: {fileID: 3389374436835315740}
   - component: {fileID: 4501548136402248814}
   m_Layer: 0
   m_Name: Crater
@@ -53767,6 +53768,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damageRadius: 5
+--- !u!114 &3389374436835315740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834864717962692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c1b66333f8029b44aeb6815e8633fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _source: {fileID: 4501548136402248814}
+  _clips:
+  - {fileID: 8300000, guid: 7ac1c81df7f125e43b59df2e442e5660, type: 3}
+  - {fileID: 8300000, guid: ff5b231ac0bb39341b4ac4ea86b148b0, type: 3}
 --- !u!82 &4501548136402248814
 AudioSource:
   m_ObjectHideFlags: 0
@@ -53777,10 +53794,10 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 80c142887d75c5c41a8c67ae933ffdfe, type: 3}
-  m_PlayOnAwake: 1
-  m_Volume: 0.5
-  m_Pitch: 1.86
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.15
+  m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
