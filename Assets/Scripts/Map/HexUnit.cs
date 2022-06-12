@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System;
+using DG.Tweening;
 
 public class HexUnit : MonoBehaviour
 {
     [SerializeField] private LayerMask _groundLayer;
+    [SerializeField] private AudioClip _panicAudio;
+    [SerializeField] private AudioSource _source;
 
     private float _orientation;
     private List<HexCell> _pathToTravel;
@@ -304,6 +307,10 @@ public class HexUnit : MonoBehaviour
 
     public void Die()
     {
+        _source.PlayOneShot(_panicAudio);
+
+        AnimateDie();
+
         if (location)
         {
             Grid.DecreaseVisibility(location, VisionRange);
@@ -311,11 +318,15 @@ public class HexUnit : MonoBehaviour
 
         Died?.Invoke(this);
         location.Unit = null;
-        Destroy(gameObject);
+        Destroy(gameObject, 0.6f);
     }
 
     public void DieWithDelay()
     {
+        _source.PlayOneShot(_panicAudio);
+
+        AnimateDie();
+
         if (location)
         {
             Grid.DecreaseVisibility(location, VisionRange);
@@ -324,6 +335,15 @@ public class HexUnit : MonoBehaviour
         Died?.Invoke(this);
         location.Unit = null;
         Destroy(gameObject, 5f);
+    }
+
+    private void AnimateDie()
+    {
+        _isAttached = true;
+
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(transform.DOScale(1.3f, 0.2f));
+        sequence.Append(transform.DOScale(0f, 0.3f));
     }
 
     public void Save(BinaryWriter writer)
