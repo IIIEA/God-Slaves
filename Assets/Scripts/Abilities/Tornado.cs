@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -66,15 +65,13 @@ public class Tornado : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<HexUnit>(out HexUnit unit))
+        if (other.TryGetComponent(out HexUnit unit))
         {
-            ReliableOnTriggerExit.NotifyTriggerEnter(other, gameObject, OnTriggerExit);
+            if (!other.attachedRigidbody)
+                return;
 
             unit.SetAttached();
             _units.Add(unit);
-
-            if (!other.attachedRigidbody)
-                return;
 
             if (other.attachedRigidbody.isKinematic)
                 other.attachedRigidbody.isKinematic = false;
@@ -91,23 +88,6 @@ public class Tornado : MonoBehaviour
             if (!_caughtObject.Contains(caught))
             {
                 _caughtObject.Add(caught);
-            }
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        ReliableOnTriggerExit.NotifyTriggerExit(other, gameObject);
-
-        TornadoCaughter caught = other.GetComponent<TornadoCaughter>();
-
-        if (caught)
-        {
-            caught.Release();
-
-            if (_caughtObject.Contains(caught))
-            {
-                _caughtObject.Remove(caught);
             }
         }
     }
