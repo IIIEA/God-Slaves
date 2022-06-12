@@ -17,8 +17,8 @@ public class HexMapEditor : MonoBehaviour
     private int _activeUrbanLevel, _activeFarmLevel, _activePlantLevel, _activeSpecialIndex;
     private int _activeTerrainTypeIndex;
     private int _brushSize;
-    private bool _applyElevation = true;
-    private bool _applyWaterLevel = true;
+    private bool _applyElevation = false;
+    private bool _applyWaterLevel = false;
     private bool _applyUrbanLevel, _applyFarmLevel, _applyPlantLevel, _applySpecialIndex;
 
     private OptionalToggle _riverMode, _roadMode, _walledMode;
