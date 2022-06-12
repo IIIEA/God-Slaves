@@ -101,6 +101,14 @@ public class Tornado : MonoBehaviour
                 _caughtObject[i].enabled = false;
             }
         }
+
+        foreach (var unit in _units)
+        {
+            if (unit != null)
+            {
+                unit.DieWithDelay();
+            }
+        }
     }
 
     private void OnDrawGizmosSelected()

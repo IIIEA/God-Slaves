@@ -99,7 +99,7 @@ public class HexUnit : MonoBehaviour
 
     private void FindTravel()
     {
-        if (InTravel == false)
+        if (InTravel == false && _isAttached == false)
         {
             Collider[] cells = Physics.OverlapSphere(transform.position, 100f, _groundLayer);
             int index;

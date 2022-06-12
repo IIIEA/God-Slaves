@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HexMapGenerator : MonoBehaviour
 {
@@ -1018,6 +1019,11 @@ public class HexMapGenerator : MonoBehaviour
 
     private void SpawnUnits(float chance)
     {
+        if(grid.Units.Count > _counter / 4)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        }
+
         if (grid.Units.Count < _counter / 4)
         {
             for (int i = 0; i < cellCount; i++)
