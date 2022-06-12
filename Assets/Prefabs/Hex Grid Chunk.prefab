@@ -46,9 +46,9 @@ MonoBehaviour:
   urbanCollections:
   - prefabs:
     - {fileID: 4000011812086372, guid: 21b1020286582424ab6d62085ed5ee87, type: 3}
-    - {fileID: 4000011812086372, guid: 5d26578fd32c84d1ab4d755ab7f23577, type: 3}
+    - {fileID: 8672934800831719123, guid: fe672ec94f5627649a9f5cc4849f4aa1, type: 3}
   - prefabs:
-    - {fileID: 4000013436407900, guid: 89adbf41f320f4141964bfa388ba2865, type: 3}
+    - {fileID: 8672934800831719123, guid: fe672ec94f5627649a9f5cc4849f4aa1, type: 3}
     - {fileID: 4000013436407900, guid: 2fad1b4af64d84c8e810f040299dec1e, type: 3}
   - prefabs:
     - {fileID: 4000013997932258, guid: bca46d0c670c447a0a5c7208498000ab, type: 3}

@@ -145,10 +145,10 @@ public class HexMapGenerator : MonoBehaviour
     static float[] moistureBands = { 0.12f, 0.28f, 0.85f };
 
     static Biome[] biomes = {
-        new Biome(0, 0, 0, 4), new Biome(4, 0, 0, 0), new Biome(4, 0, 0, 1), new Biome(4, 0, 0, 0),
-        new Biome(0, 0, 0, 4), new Biome(3, 0, 0, 0), new Biome(3, 1, 1, 1), new Biome(2, 1, 0, 1),
-        new Biome(0, 0, 0, 4), new Biome(1, 0, 0, 4), new Biome(1, 1, 1, 0), new Biome(2, 1, 0, 0),
-        new Biome(0, 0, 0, 4), new Biome(1, 1, 0, 4), new Biome(1, 1, 0, 0), new Biome(1, 3, 0, 0)
+        new Biome(0, 0, 0, 1), new Biome(4, 0, 0, 0), new Biome(4, 0, 0, 1), new Biome(4, 0, 0, 0),
+        new Biome(0, 0, 0, 1), new Biome(3, 0, 0, 0), new Biome(3, 1, 1, 1), new Biome(2, 1, 0, 1),
+        new Biome(0, 0, 0, 1), new Biome(1, 0, 0, 1), new Biome(1, 1, 1, 0), new Biome(2, 1, 0, 0),
+        new Biome(0, 0, 0, 1), new Biome(1, 1, 0, 1), new Biome(1, 1, 0, 0), new Biome(1, 3, 0, 0)
     };
 
     private void Start()
@@ -976,7 +976,7 @@ public class HexMapGenerator : MonoBehaviour
         {
             cellBiome.Urban = 0;
         }
-        else if (cellBiome.Urban < 3)
+        else if (cellBiome.Urban < 4)
         {
             cellBiome.Urban += 1;
         }

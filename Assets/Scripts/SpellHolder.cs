@@ -5,7 +5,9 @@ using UnityEngine;
 public class SpellHolder : MonoBehaviour
 {
     [SerializeField] private HexGrid _grid;
-    [SerializeField] private GameObject _prefab;
+    [SerializeField] private GameObject[] _prefabs;
+
+    private GameObject _prefab = null;
 
     void Update()
     {
@@ -15,11 +17,28 @@ public class SpellHolder : MonoBehaviour
         }
     }
 
+    public void SetAbility(int index)
+    {
+        if (index < 0)
+        {
+            _prefab = null;
+            return;
+        }
+
+        if (index > _prefabs.Length)
+            return;
+
+        _prefab = _prefabs[index];
+    }
+
     private void UseAbility()
     {
-        if (GetCellUnderCursor(out Vector3 position))
+        if (_prefab != null)
         {
-            var ability = Instantiate(_prefab, position, _prefab.transform.rotation);
+            if (GetCellUnderCursor(out Vector3 position))
+            {
+                var ability = Instantiate(_prefab, position, _prefab.transform.rotation);
+            }
         }
     }
 

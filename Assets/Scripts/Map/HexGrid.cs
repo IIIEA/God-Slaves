@@ -435,9 +435,6 @@ public class HexGrid : MonoBehaviour
                 current = current.PathFrom;
             }
         }
-
-        _currentPathFrom.EnableHighlight(Color.blue);
-        _currentPathTo.EnableHighlight(Color.red);
     }
 
     public void FindPath(HexCell fromCell, HexCell toCell, HexUnit unit)

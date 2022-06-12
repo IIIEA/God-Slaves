@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class NewMapMenu : MonoBehaviour
 {
@@ -6,14 +7,14 @@ public class NewMapMenu : MonoBehaviour
     public HexMapGenerator MapGenerator;
 
     private bool _generateMaps = true;
-    private bool _wrapping = true;
+    private bool _wrapping = false;
 
-    public void ToggleMapGeneration(bool toggle)
+    public void ToggleMapGeneration(Toggle toggle)
     {
         _generateMaps = toggle;
     }
 
-    public void ToggleWrapping(bool toggle)
+    public void ToggleWrapping(Toggle toggle)
     {
         _wrapping = toggle;
     }
