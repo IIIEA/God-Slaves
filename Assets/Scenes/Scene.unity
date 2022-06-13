@@ -8506,8 +8506,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1646844385}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: CreateSmallMap
+        m_TargetAssemblyTypeName: NewMapMenu, Assembly-CSharp
+        m_MethodName: CreateMediumMap
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
