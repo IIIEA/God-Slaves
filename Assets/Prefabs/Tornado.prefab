@@ -115,7 +115,7 @@ MonoBehaviour:
   _rotationAxis: {x: 0, y: 1, z: 0}
   _lift: 90
   _rotationStrength: 5
-  _tornadoStrength: 75
+  _tornadoStrength: 25
 --- !u!114 &1937324584321809601
 MonoBehaviour:
   m_ObjectHideFlags: 0

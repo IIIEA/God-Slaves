@@ -312,11 +312,6 @@ public class HexUnit : MonoBehaviour
 
         AnimateDie();
 
-        if (location)
-        {
-            Grid.DecreaseVisibility(location, VisionRange);
-        }
-
         Died?.Invoke(this);
         location.Unit = null;
         Destroy(gameObject, 0.6f);
@@ -326,16 +321,9 @@ public class HexUnit : MonoBehaviour
     {
         _source.PlayOneShot(_panicAudio);
 
-        AnimateDie();
-
-        if (location)
-        {
-            Grid.DecreaseVisibility(location, VisionRange);
-        }
-
         Died?.Invoke(this);
         location.Unit = null;
-        Destroy(gameObject, 5f);
+        Destroy(gameObject, 10f);
     }
 
     private void AnimateDie()
