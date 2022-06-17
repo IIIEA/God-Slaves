@@ -91,7 +91,6 @@ public class HexGrid : MonoBehaviour
     {
         _units.Remove(unit);
         UnitCountChanged?.Invoke(_units.Count);
-
         unit.Die();
     }
 
